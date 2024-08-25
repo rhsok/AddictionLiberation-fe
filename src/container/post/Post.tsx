@@ -2,8 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 function Post() {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const divRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -26,45 +24,43 @@ function Post() {
     }
   };
 
+  const [isPlaceholderActive, setIsPlaceholderActive] = useState<boolean>(true);
+  const divRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    if (!isEditing && divRef.current) {
-      divRef.current.innerHTML = `<span style="pointer-events: none; color: gray;">내용을 작성해 볼까요?</span>`;
+    if (divRef.current) {
+      divRef.current.style.color = isPlaceholderActive ? 'gray' : 'black';
+      if (isPlaceholderActive) {
+        divRef.current.textContent = '내용을 작성해 볼까요?';
+      }
     }
-  }, [isEditing]);
+  }, [isPlaceholderActive]);
 
-  const handleClick = () => {
-    if (!isEditing) {
-      setIsEditing(true);
-      setTimeout(() => {
-        if (divRef.current) {
-          divRef.current.innerHTML = ''; // Placeholder 제거
-          divRef.current.focus(); // Div에 포커스를 맞추기
-          const selection = window.getSelection();
-          const range = document.createRange();
-          range.selectNodeContents(divRef.current);
-          range.collapse(true); // 커서를 맨 앞으로 이동
-          selection?.removeAllRanges();
-          selection?.addRange(range);
-        }
-      }, 0);
-    }
-  };
+  // const handleFocus = () => {
+  //   if (divRef.current && isPlaceholderActive) {
+  //     const selection = window.getSelection();
+  //     const range = document.createRange();
+  //     range.selectNodeContents(divRef.current);
+  //     range.collapse(true); // This moves the cursor to the start of the div
+  //   }
+  // };
 
-  const handleEditableInput = (event: React.FormEvent<HTMLDivElement>) => {
-    if (divRef.current && divRef.current.textContent?.trim() === '') {
-      setIsEditing(false);
+  const handleEditableInput = () => {
+    if (divRef.current && isPlaceholderActive) {
+      divRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
+      setIsPlaceholderActive(false);
     }
   };
 
   const handleBlur = () => {
-    if (divRef.current && divRef.current.textContent?.trim() === '') {
-      setIsEditing(false);
+    if (divRef.current && divRef.current.textContent === '') {
+      setIsPlaceholderActive(true);
     }
   };
 
   return (
-    <div className='flex'>
-      <div className='relative w-1/2 h-screen border-r'>
+    <div className='flex h-screen'>
+      <div className='flex flex-col relative w-1/2 h-screen border-r'>
         <div className='max-h-[583px] pt-[32px] px-[48px] '>
           <textarea
             ref={textareaRef}
@@ -129,15 +125,13 @@ function Post() {
         </div>
         <div
           ref={divRef}
-          contentEditable={isEditing}
-          onClick={handleClick}
-          onInput={handleInput}
+          contentEditable
+          onInput={handleEditableInput}
           onBlur={handleBlur}
-          className='mx-[48px] mt-[32px] outline-none text-gray-500'
-        >
-          내용을 작성해 볼까요?
-        </div>
-        <div className='absolute bottom-0 flex justify-between px-[48px] w-full h-[64px] border-t'>
+          className='px-4 pb-[65px] w-full flex-1  outline-none  bg-slate-100 overflow-y-scroll '
+        />
+        <div className='w-full h-[64px]'></div>
+        <div className='fixed bottom-0 flex justify-between px-[48px] w-full h-[64px] border-t'>
           <div className='flex items-center justify-center'>뒤로가기</div>
           <div className='flex items-center justify-center'>게시하기</div>
         </div>
