@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 function Post() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -24,9 +24,43 @@ function Post() {
     }
   };
 
+  const [isPlaceholderActive, setIsPlaceholderActive] = useState<boolean>(true);
+  const divRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (divRef.current) {
+      divRef.current.style.color = isPlaceholderActive ? 'gray' : 'black';
+      if (isPlaceholderActive) {
+        divRef.current.textContent = '내용을 작성해 볼까요?';
+      }
+    }
+  }, [isPlaceholderActive]);
+
+  // const handleFocus = () => {
+  //   if (divRef.current && isPlaceholderActive) {
+  //     const selection = window.getSelection();
+  //     const range = document.createRange();
+  //     range.selectNodeContents(divRef.current);
+  //     range.collapse(true); // This moves the cursor to the start of the div
+  //   }
+  // };
+
+  const handleEditableInput = () => {
+    if (divRef.current && isPlaceholderActive) {
+      divRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
+      setIsPlaceholderActive(false);
+    }
+  };
+
+  const handleBlur = () => {
+    if (divRef.current && divRef.current.textContent === '') {
+      setIsPlaceholderActive(true);
+    }
+  };
+
   return (
-    <div className='flex'>
-      <div className='relative w-1/2 h-screen border-r'>
+    <div className='flex h-screen'>
+      <div className='flex flex-col relative w-1/2 h-screen border-r'>
         <div className='max-h-[583px] pt-[32px] px-[48px] '>
           <textarea
             ref={textareaRef}
@@ -44,7 +78,7 @@ function Post() {
             placeholder='부제를 입력하세요'
           ></textarea>
         </div>
-        <div className='flex items-center px-[48px] text-gray-400 '>
+        <div className='flex items-center px-[48px] text-gray-400  '>
           <button className='w-[48px] h-[48px] hover:bg-gray-100'>
             <div className='text-[16px]'>
               H<span className='text-[12px]'>1</span>
@@ -89,8 +123,18 @@ function Post() {
             <div className='text-[16px]'>C</div>
           </button>
         </div>
-        <div></div>
-        <div className=''></div>
+        <div
+          ref={divRef}
+          contentEditable
+          onInput={handleEditableInput}
+          onBlur={handleBlur}
+          className='px-4 pb-[65px] w-full flex-1  outline-none  bg-slate-100 overflow-y-scroll '
+        />
+        <div className='w-full h-[64px]'></div>
+        <div className='fixed bottom-0 flex justify-between px-[48px] w-full h-[64px] border-t'>
+          <div className='flex items-center justify-center'>뒤로가기</div>
+          <div className='flex items-center justify-center'>게시하기</div>
+        </div>
       </div>
       <div className='w-1/2'></div>
     </div>
