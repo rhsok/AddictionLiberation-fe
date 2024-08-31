@@ -1,10 +1,10 @@
-import Post from '@/container/post/Post';
+import Write from '@/container/write/Write';
 import React from 'react';
 
 function Page() {
   return (
     <div>
-      <Post />
+      <Write />
     </div>
   );
 }
