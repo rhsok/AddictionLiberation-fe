@@ -21,6 +21,7 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         {/* <Header /> */}
         <main className=''>{children}</main>
+        <div id='modal-root'></div>
         {/* <Footer /> */}
       </body>
     </html>

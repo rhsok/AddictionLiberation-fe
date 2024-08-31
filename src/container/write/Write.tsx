@@ -1,5 +1,17 @@
 'use client';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import ModalPortal from '@/components/ModalPortal';
+import Dropdown from '@/components/Dropdown/Dropdown';
+
+// DropdownKey는 세 가지 키만을 허용하는 타입
+type DropdownKey = 'category' | 'detail' | 'main';
+
+// 각 키에 대한 타입을 Record를 사용하여 정의
+interface IDropdownRefs {
+  category: React.RefObject<HTMLDivElement>;
+  detail: React.RefObject<HTMLDivElement>;
+  main: React.RefObject<HTMLDivElement>;
+}
 
 function Write() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -19,6 +31,34 @@ function Write() {
     sub: '',
     htmlContent: '',
   });
+  const [isOpen, setIsOpen] = useState<{ [key: string]: boolean }>({
+    category: false,
+    detail: false,
+    main: false,
+  }); // 드롭다운 메뉴 상태
+  // 초기화
+  const buttonRef: IDropdownRefs = {
+    category: useRef<HTMLDivElement>(null),
+    detail: useRef<HTMLDivElement>(null),
+    main: useRef<HTMLDivElement>(null),
+  };
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: string]: string;
+  }>({
+    category: '카테고리',
+    detail: '세부내용',
+    main: '메인',
+  });
+
+  // 드롭다운 옵션
+  const dropdownOptions: Record<DropdownKey, string[]> = {
+    category: ['Option A', 'Option B', 'Option C'],
+    detail: ['Detail 1', 'Detail 2', 'Detail 3'],
+    main: ['Main 1', 'Main 2', 'Main 3'],
+  };
+  const handleSelect = (key: string, option: string) => {
+    setSelectedOptions((prev) => ({ ...prev, [key]: option }));
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -350,20 +390,56 @@ function Write() {
             <div className='text-[16px]'>글자</div>
           </button> */}
         </div>
-        <div
-          ref={editorRef}
-          contentEditable
-          onInput={handleEditableInput}
-          // onFocus={handleFocus}
-          className='px-[60px] pb-[65px] w-full flex-1  outline-none  bg-slate-100 overflow-y-scroll '
-        />
+        <div className='flex flex-row w-full px-[47px] py-2 gap-10'>
+          {Object.keys(dropdownOptions).map((key) => (
+            <div
+              key={key}
+              ref={buttonRef[key as keyof IDropdownRefs]} // 타입 단언
+              onClick={() =>
+                setIsOpen((prev) => ({
+                  ...prev,
+                  [key as keyof IDropdownRefs]: true,
+                }))
+              }
+              className='relative px-10 py-1 border rounded-md cursor-pointer hover:bg-gray-200'
+            >
+              {selectedOptions[key as keyof IDropdownRefs]}
+              {isOpen[key as keyof IDropdownRefs] && (
+                <ModalPortal>
+                  <Dropdown
+                    buttonRef={buttonRef[key as keyof IDropdownRefs]}
+                    onClose={() =>
+                      setIsOpen((prev) => ({
+                        ...prev,
+                        [key as keyof IDropdownRefs]: false,
+                      }))
+                    }
+                    options={dropdownOptions[key as keyof IDropdownRefs]}
+                    onSelect={(option) =>
+                      handleSelect(key as keyof IDropdownRefs, option)
+                    }
+                  />
+                </ModalPortal>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className='px-[48px]  flex flex-1 overflow-y-scroll '>
+          <div
+            ref={editorRef}
+            contentEditable
+            onInput={handleEditableInput}
+            className='px-4 py-2 w-full outline-none  bg-slate-100 overflow-y-scroll  '
+          />
+        </div>
+
         <div className='w-full h-[64px]'></div>
         <div className='fixed bottom-0 flex justify-between px-[48px] w-1/2 h-[64px] border-t'>
           <div className='flex items-center justify-center'>뒤로가기</div>
           <div className='flex items-center justify-center'>게시하기</div>
         </div>
       </div>
-      <div className='w-1/2  bg-blue-200  overflow-hidden break-words '>
+      <div className='w-1/2   overflow-hidden break-words '>
         <div className='w-full h-screen pt-[32px] px-[48px] overflow-y-scroll'>
           <pre className='w-full mt-4 whitespace-pre-wrap min-h-[56px] text-[44px] font-bold'>
             {post.main}
@@ -373,7 +449,7 @@ function Write() {
             {post.sub}
           </pre>
           <div
-            className='my-4  w-full h-[calc(100%-100px)] flex-1  whitespace-pre-wrap overflow-y-scroll'
+            className='my-4 px-4 py-2 w-full h-[calc(100%-200px)]  bg-slate-100 flex-1  whitespace-pre-wrap overflow-y-scroll'
             dangerouslySetInnerHTML={{ __html: post.htmlContent }}
           />
         </div>
