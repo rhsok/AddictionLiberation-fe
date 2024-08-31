@@ -1,7 +1,7 @@
 'use client';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
-function Post() {
+function Write() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [isLinkModalActive, setIsLinkModalActive] = useState<boolean>(false);
@@ -10,6 +10,15 @@ function Post() {
   const [selectedImage, setSelectedImage] = useState<HTMLImageElement | null>(
     null
   );
+  const [post, setPost] = useState<{
+    main: string;
+    sub: string;
+    htmlContent: string;
+  }>({
+    main: '',
+    sub: '',
+    htmlContent: '',
+  });
 
   const handleClickOutside = (event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -25,7 +34,7 @@ function Post() {
     };
   }, []);
 
-  const handleInput = () => {
+  const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textareaRef.current) {
       // Reset height to auto to calculate the correct scrollHeight
       textareaRef.current.style.height = 'auto';
@@ -33,8 +42,11 @@ function Post() {
       const newHeight = Math.min(textareaRef.current.scrollHeight, 200);
       textareaRef.current.style.height = `${newHeight}px`;
     }
+    setPost((prev) => {
+      return { ...prev, main: event.target.value };
+    });
   };
-  const handleSubInput = () => {
+  const handleSubInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (subTextareaRef.current) {
       // Reset height to auto to calculate the correct scrollHeight
       subTextareaRef.current.style.height = 'auto';
@@ -42,6 +54,9 @@ function Post() {
       const newHeight = Math.min(subTextareaRef.current.scrollHeight, 100);
       subTextareaRef.current.style.height = `${newHeight}px`;
     }
+    setPost((prev) => {
+      return { ...prev, sub: event.target.value };
+    });
   };
 
   function formatDoc(cmd: any, value: string | null = null) {
@@ -53,7 +68,6 @@ function Post() {
   }
 
   const [isPlaceholderActive, setIsPlaceholderActive] = useState<boolean>(true);
-  const [fontSize, setFontSize] = useState<string>('16px');
   const editorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -69,6 +83,15 @@ function Post() {
     if (editorRef.current && isPlaceholderActive) {
       editorRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
       setIsPlaceholderActive(false);
+    }
+    if (editorRef.current) {
+      setPost((prev) => {
+        return {
+          ...prev,
+          htmlContent: editorRef.current!.innerHTML,
+        };
+      });
+      console.log(editorRef.current.innerHTML);
     }
   };
 
@@ -90,24 +113,86 @@ function Post() {
     }
   };
 
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  const [savedRange, setSavedRange] = useState<Range | null>(null);
+
+  const handleFocus = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      setSavedRange(range);
+    }
+  };
+
+  const insertTextAtCursor = () => {
+    const text = ' 삽입할 텍스트 ';
+    const selection = window.getSelection();
+    const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+    if (!selection) return;
+    if (range && editorRef.current) {
+      range.deleteContents(); // 선택된 텍스트가 있으면 내용을 삭제합니다.
+      const textNode = document.createTextNode(text);
+      range.insertNode(textNode);
+
+      // 삽입 후 텍스트 뒤에 커서를 위치시킵니다.
+      const space = document.createTextNode(' ');
+      range.insertNode(space); // 커서를 이동하기 위해 텍스트 노드 뒤에 공백 노드를 삽입합니다.
+      selection.removeAllRanges();
+      range.setStartAfter(textNode);
+      range.setEndAfter(textNode);
+      selection.addRange(range);
+    }
+  };
+
+  const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (!editorRef.current) return;
-        // contentEditable 영역에 포커스를 설정합니다.
-        editorRef.current.focus();
-        const imgHTML = `<img src="${e.target?.result}" style="max-width: 100%; height: auto;" />`;
-        document.execCommand('insertHTML', false, imgHTML);
+      reader.onload = (e) => {
+        if (editorRef.current) {
+          editorRef.current.focus();
+          // 이미지를 가운데 정렬된 상태로 삽입
+          const imgHTML = `
+            <div style="">
+              <img src="${e.target?.result}" style="width: 70%; cursor: pointer; float: left;" class="inserted-image">
+            </div>`;
+          document.execCommand('insertHTML', false, imgHTML);
+        }
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const alignImage = (alignment: 'left' | 'center' | 'right') => {
+    if (editorRef.current) {
+      const images = editorRef.current.getElementsByTagName('img');
+      if (images.length > 0) {
+        const img = images[images.length - 1]; // 가장 최근에 삽입된 이미지
+        img.style.float = '';
+        img.style.margin = '';
+        img.style.display = '';
+
+        if (alignment === 'left') {
+          img.style.float = 'left';
+          img.style.marginRight = '10px';
+        } else if (alignment === 'right') {
+          img.style.float = 'right';
+          img.style.marginLeft = '10px';
+        } else if (alignment === 'center') {
+          img.parentElement!.style.textAlign = 'center';
+          img.style.display = 'block';
+          img.style.margin = '10px auto';
+        }
+      }
     }
   };
 
   // useEffect(() => {
   //   console.log('linkURL', linkURL);
   // }, [linkURL]);
+
+  useEffect(() => {
+    console.log('savedRange', savedRange);
+  }, [savedRange]);
 
   return (
     <div className='flex h-screen'>
@@ -186,9 +271,6 @@ function Post() {
             <div className='text-[16px]'>{`"`}</div>
           </button> */}
           <button
-            // onClick={() => {
-            //   document.execCommand('createLink', false, 'naver.com');
-            // }}
             onClick={() => setIsLinkModalActive(!isLinkModalActive)}
             className='relative w-[48px] h-[48px] hover:bg-gray-100 cursor-default'
           >
@@ -216,7 +298,7 @@ function Post() {
             type='file'
             accept='image/*'
             id='image-upload'
-            onChange={handleImageUpload}
+            onChange={handleInsertImage}
             className='hidden '
           ></input>
           <label
@@ -228,12 +310,52 @@ function Post() {
           {/* <button className='w-[48px] h-[48px] hover:bg-gray-100'>
             <div className='text-[16px]'>C</div>
           </button> */}
+          <div className=' w-[1px] h-[20px] border mx-2 ' />
+          {/* 왼쪽 정렬 버튼 */}
+          <button
+            className='w-[48px] h-[48px] hover:bg-gray-100 flex justify-center items-center'
+            onClick={() => {
+              alignImage('left');
+              formatDoc('justifyLeft');
+            }}
+          >
+            <div className='text-[16px]'>Left</div>
+          </button>
+
+          {/* 가운데 정렬 버튼 */}
+          <button
+            className='w-[48px] h-[48px] hover:bg-gray-100 flex justify-center items-center'
+            onClick={() => {
+              alignImage('center');
+              formatDoc('justifyLeft');
+            }}
+          >
+            <div className='text-[16px]'>Center</div>
+          </button>
+
+          {/* 오른쪽 정렬 버튼 */}
+          <button
+            className='w-[48px] h-[48px] hover:bg-gray-100 flex justify-center items-center'
+            onClick={() => {
+              alignImage('right');
+              formatDoc('justifyRight');
+            }}
+          >
+            <div className='text-[16px]'>Right</div>
+          </button>
+          {/* <button
+            className='w-[48px] h-[48px] hover:bg-gray-100 flex justify-center items-center'
+            onClick={() => insertTextAtCursor()}
+          >
+            <div className='text-[16px]'>글자</div>
+          </button> */}
         </div>
         <div
           ref={editorRef}
           contentEditable
           onInput={handleEditableInput}
-          className='px-4 pb-[65px] w-full flex-1  outline-none  bg-slate-100 overflow-y-scroll '
+          // onFocus={handleFocus}
+          className='px-[60px] pb-[65px] w-full flex-1  outline-none  bg-slate-100 overflow-y-scroll '
         />
         <div className='w-full h-[64px]'></div>
         <div className='fixed bottom-0 flex justify-between px-[48px] w-1/2 h-[64px] border-t'>
@@ -241,9 +363,23 @@ function Post() {
           <div className='flex items-center justify-center'>게시하기</div>
         </div>
       </div>
-      <div className='w-1/2'></div>
+      <div className='w-1/2  bg-blue-200  overflow-hidden break-words '>
+        <div className='w-full h-screen pt-[32px] px-[48px] overflow-y-scroll'>
+          <pre className='w-full mt-4 whitespace-pre-wrap min-h-[56px] text-[44px] font-bold'>
+            {post.main}
+          </pre>
+          <div className='w-full h-[4px] border border-black bg-black'></div>
+          <pre className='w-full mt-4 text-[24px] min-h-[30px] whitespace-pre-wrap '>
+            {post.sub}
+          </pre>
+          <div
+            className='my-4  w-full h-[calc(100%-100px)] flex-1  whitespace-pre-wrap overflow-y-scroll'
+            dangerouslySetInnerHTML={{ __html: post.htmlContent }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
 
-export default Post;
+export default Write;
