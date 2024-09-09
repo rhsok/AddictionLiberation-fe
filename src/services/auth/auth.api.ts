@@ -10,6 +10,8 @@ export const signupUser = async (data: any) => {
 
 /**로그인 */
 export const loginUser = async (data: any) => {
-  const response = await axios.post(`${baseURL}/users/login`, data);
+  const response = await axios.post(`${baseURL}/users/login`, data, {
+    withCredentials: true,
+  });
   return response.data;
 };
