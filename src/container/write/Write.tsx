@@ -17,11 +17,11 @@ function Write() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [isLinkModalActive, setIsLinkModalActive] = useState<boolean>(false);
+  const [isVideoModalActive, setVideoModalActive] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const [linkURL, setLinkURL] = useState<string>('');
-  const [selectedImage, setSelectedImage] = useState<HTMLImageElement | null>(
-    null
-  );
+  const [videoTag, setVideoTag] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [post, setPost] = useState<{
     main: string;
     sub: string;
@@ -153,6 +153,15 @@ function Write() {
     }
   };
 
+  const insertIframe = () => {
+    console.log(videoTag);
+    if (editorRef.current) {
+      editorRef.current.focus();
+      const iframeHTML = `${videoTag}`;
+      document.execCommand('insertHTML', false, iframeHTML);
+    }
+  };
+
   const [savedRange, setSavedRange] = useState<Range | null>(null);
 
   const handleFocus = () => {
@@ -185,6 +194,7 @@ function Write() {
 
   const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -199,6 +209,9 @@ function Write() {
         }
       };
       reader.readAsDataURL(file);
+    }
+    if (event.target.files) {
+      setSelectedImage(event.target.files[0]);
     }
   };
 
@@ -319,7 +332,7 @@ function Write() {
               <div
                 ref={modalRef}
                 onClick={(e: any) => e.stopPropagation()}
-                className='absolute flex flex-col w-[400px] h-[140px]  border bg-white px-4 '
+                className='absolute z-20 flex flex-col w-[400px] h-[140px]  border bg-white px-4 '
               >
                 <p className='mt-2 text-black'>링크를 입력하세요</p>
                 <input
@@ -347,9 +360,32 @@ function Write() {
           >
             <div className='text-[16px] '>Img</div>
           </label>
-          {/* <button className='w-[48px] h-[48px] hover:bg-gray-100'>
-            <div className='text-[16px]'>C</div>
-          </button> */}
+          <button
+            onClick={() => setVideoModalActive(!isVideoModalActive)}
+            className=' h-[48px] mx-4 hover:bg-gray-100'
+          >
+            <div className='text-[16px]'>VideoTag</div>
+            {isVideoModalActive && (
+              <div
+                ref={modalRef}
+                onClick={(e: any) => e.stopPropagation()}
+                className='absolute z-20 flex flex-col w-[700px] h-[340px]  border bg-white px-4 '
+              >
+                <p className='mt-4 text-black'>비디오 태그</p>
+                <textarea
+                  placeholder='내용을 입력하세요'
+                  onChange={(e) => setVideoTag(e.target.value)}
+                  className='outline-none border  mt-4 h-[300px] rounded-lg px-4 pt-4 resize-none text-black'
+                />
+                <button
+                  onClick={insertIframe}
+                  className='mt-3 mb-6 py-2 w-[100px] text-black border mx-auto rounded-lg'
+                >
+                  확인
+                </button>
+              </div>
+            )}
+          </button>
           <div className=' w-[1px] h-[20px] border mx-2 ' />
           {/* 왼쪽 정렬 버튼 */}
           <button
@@ -367,7 +403,7 @@ function Write() {
             className='w-[48px] h-[48px] hover:bg-gray-100 flex justify-center items-center'
             onClick={() => {
               alignImage('center');
-              formatDoc('justifyLeft');
+              formatDoc('justifyCenter');
             }}
           >
             <div className='text-[16px]'>Center</div>
