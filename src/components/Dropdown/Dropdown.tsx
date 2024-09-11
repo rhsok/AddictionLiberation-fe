@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
+interface Option {
+  label: string;
+  value: number | boolean;
+}
+
 interface DropdownProps {
   buttonRef: React.RefObject<HTMLDivElement>;
   onClose: () => void;
-  options: string[];
-  onSelect: (option: string) => void;
+  options: Option[];
+  onSelect: (option: Option) => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -62,7 +67,7 @@ const Dropdown: React.FC<DropdownProps> = ({
               onClose(); // 선택 후 드롭다운 닫기
             }}
           >
-            {option}
+            {option.label} {/* label 표시 */}
           </li>
         ))}
       </ul>
