@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/components/ModalPortal';
 import Dropdown from '@/components/Dropdown/Dropdown';
+import { writePost } from '@/services/write/write.api';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
 type DropdownKey = 'category' | 'detail' | 'main';
@@ -43,20 +44,37 @@ function Write() {
     main: useRef<HTMLDivElement>(null),
   };
   const [selectedOptions, setSelectedOptions] = useState<{
-    [key: string]: string;
+    [key: string]: { label: string; value: number | boolean };
   }>({
-    category: '카테고리',
-    detail: '세부내용',
-    main: '메인',
+    category: { label: '카테고리', value: 0 },
+    detail: { label: '포스트 타입', value: 0 },
+    main: { label: '메인여부', value: 0 },
   });
 
   // 드롭다운 옵션
-  const dropdownOptions: Record<DropdownKey, string[]> = {
-    category: ['Option A', 'Option B', 'Option C'],
-    detail: ['Detail 1', 'Detail 2', 'Detail 3'],
-    main: ['Main 1', 'Main 2', 'Main 3'],
+  const dropdownOptions: Record<
+    DropdownKey,
+    { label: string; value: number | boolean }[]
+  > = {
+    category: [
+      { label: 'Youtube', value: 1 },
+      { label: 'Alcoholism', value: 2 },
+      { label: 'Game', value: 3 },
+    ],
+    detail: [
+      { label: 'Main', value: 1 },
+      { label: 'Normal', value: 2 },
+    ],
+    main: [
+      { label: 'true', value: true },
+      { label: 'false', value: false },
+    ],
   };
-  const handleSelect = (key: string, option: string) => {
+
+  const handleSelect = (
+    key: string,
+    option: { label: string; value: number | boolean }
+  ) => {
     setSelectedOptions((prev) => ({ ...prev, [key]: option }));
   };
 
@@ -210,9 +228,9 @@ function Write() {
       };
       reader.readAsDataURL(file);
     }
-    if (event.target.files) {
-      setSelectedImage(event.target.files[0]);
-    }
+    // if (event.target.files) {
+    //   setSelectedImage(event.target.files[0]);
+    // }
   };
 
   const alignImage = (alignment: 'left' | 'center' | 'right') => {
@@ -239,9 +257,25 @@ function Write() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log('linkURL', linkURL);
-  // }, [linkURL]);
+  const handleSubmit = async () => {
+    const reqData = {
+      title: '',
+      content: '',
+      subtitle: '',
+      videoUrl: '',
+      published: true,
+      postTypeId: '',
+      publishedDate: new Date(),
+      categories: {
+        create: '',
+      },
+    };
+    try {
+      await writePost(reqData);
+    } catch (error) {
+      console.error('서버 요청 오류', error);
+    }
+  };
 
   useEffect(() => {
     console.log('savedRange', savedRange);
@@ -439,7 +473,7 @@ function Write() {
               }
               className='relative px-10 py-1 border rounded-md cursor-pointer hover:bg-gray-200'
             >
-              {selectedOptions[key as keyof IDropdownRefs]}
+              {selectedOptions[key as keyof IDropdownRefs].label}
               {isOpen[key as keyof IDropdownRefs] && (
                 <ModalPortal>
                   <Dropdown
