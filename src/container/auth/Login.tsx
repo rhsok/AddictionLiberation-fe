@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { setCookie } from 'nookies';
 
 function Login() {
   const {
@@ -32,6 +33,10 @@ function Login() {
         scope: decodedJWT.scope,
         iat: decodedJWT.iat,
         exp: decodedJWT.exp,
+      });
+      setCookie(null, 'jwt', resData.refreshToken, {
+        maxAge: 24 * 60 * 60,
+        path: '/',
       });
       alert('로그인 완료');
     } catch (error) {

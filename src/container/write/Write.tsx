@@ -2,16 +2,16 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/components/ModalPortal';
 import Dropdown from '@/components/Dropdown/Dropdown';
-import { writePost } from '@/services/write/write.api';
+import { uploadImage, writePost } from '@/services/post/post.api';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
-type DropdownKey = 'category' | 'detail' | 'main';
+type DropdownKey = 'category' | 'postType' | 'isMain';
 
 // 각 키에 대한 타입을 Record를 사용하여 정의
 interface IDropdownRefs {
   category: React.RefObject<HTMLDivElement>;
-  detail: React.RefObject<HTMLDivElement>;
-  main: React.RefObject<HTMLDivElement>;
+  postType: React.RefObject<HTMLDivElement>;
+  isMain: React.RefObject<HTMLDivElement>;
 }
 
 function Write() {
@@ -34,21 +34,21 @@ function Write() {
   });
   const [isOpen, setIsOpen] = useState<{ [key: string]: boolean }>({
     category: false,
-    detail: false,
-    main: false,
+    postType: false,
+    isMain: false,
   }); // 드롭다운 메뉴 상태
   // 초기화
   const buttonRef: IDropdownRefs = {
     category: useRef<HTMLDivElement>(null),
-    detail: useRef<HTMLDivElement>(null),
-    main: useRef<HTMLDivElement>(null),
+    postType: useRef<HTMLDivElement>(null),
+    isMain: useRef<HTMLDivElement>(null),
   };
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: { label: string; value: number | boolean };
   }>({
     category: { label: '카테고리', value: 0 },
-    detail: { label: '포스트 타입', value: 0 },
-    main: { label: '메인여부', value: 0 },
+    postType: { label: '포스트 타입', value: 0 },
+    isMain: { label: '메인여부', value: true },
   });
 
   // 드롭다운 옵션
@@ -61,11 +61,11 @@ function Write() {
       { label: 'Alcoholism', value: 2 },
       { label: 'Game', value: 3 },
     ],
-    detail: [
+    postType: [
       { label: 'Main', value: 1 },
       { label: 'Normal', value: 2 },
     ],
-    main: [
+    isMain: [
       { label: 'true', value: true },
       { label: 'false', value: false },
     ],
@@ -228,9 +228,9 @@ function Write() {
       };
       reader.readAsDataURL(file);
     }
-    // if (event.target.files) {
-    //   setSelectedImage(event.target.files[0]);
-    // }
+    if (event.target.files) {
+      setSelectedImage(event.target.files[0]);
+    }
   };
 
   const alignImage = (alignment: 'left' | 'center' | 'right') => {
@@ -258,22 +258,86 @@ function Write() {
   };
 
   const handleSubmit = async () => {
-    const reqData = {
-      title: '',
-      content: '',
-      subtitle: '',
-      videoUrl: '',
-      published: true,
-      postTypeId: '',
-      publishedDate: new Date(),
-      categories: {
-        create: '',
-      },
-    };
+    if (!editorRef.current) return;
+    let htmlContent = editorRef.current.innerHTML; // contentEditable에서 HTML 가져오기
+
+    // 이미지 업로드 로직
+    const images = []; // 업로드할 이미지 목록
+    const regex = /<img[^>]+src="([^">]+)"/g; // img 태그의 src 속성을 찾기 위한 정규 표현식
+    let match;
+
+    console.log('1');
+    let file;
+    while ((match = regex.exec(htmlContent)) !== null) {
+      const imgSrc = match[1]; // img 태그의 src 값
+
+      if (imgSrc.startsWith('data:image/')) {
+        // data URL인 경우 Blob으로 변환
+        const response = await fetch(imgSrc);
+        const blob = await response.blob();
+        file = new File([blob], 'uploaded_image.png', { type: blob.type });
+      } else {
+        // 일반 URL인 경우, fetch로 파일 가져오기
+        file = await fetch(imgSrc).then((res) => res.blob());
+      }
+
+      // 이미지 업로드
+      try {
+        console.log('2');
+        const uploadedImageUrl = await uploadImage(file); // 서버에 이미지 업로드
+        console.log('이미지저장완료', uploadedImageUrl);
+        images.push(uploadedImageUrl); // 업로드된 이미지 URL 저장
+        console.log('htmlContent', htmlContent);
+
+        // HTML 내용에서 기존 이미지 src를 업로드된 이미지 URL로 교체
+        htmlContent = htmlContent.replace(imgSrc, uploadedImageUrl.filePath);
+        console.log('a', htmlContent);
+        const reqData = {
+          title: post.main,
+          content: htmlContent,
+          subtitle: post.sub,
+          videoUrl: videoTag,
+          published: true,
+          postTypeId: selectedOptions.postType.value,
+          publishedDate: new Date(),
+          categories: [
+            {
+              categoryId: selectedOptions.category.value,
+              isMain: selectedOptions.isMain.value,
+            },
+          ],
+        };
+        const resData = await writePost(reqData);
+        console.log('게시글 작성 완료', resData);
+      } catch (error) {
+        console.error('게시글 작성 중 오류 발생:', error);
+      }
+    }
+
+    // console.log('submit', reqData);
     try {
-      await writePost(reqData);
+      if (!selectedImage) {
+        const reqData = {
+          title: post.main,
+          content: post.htmlContent,
+          subtitle: post.sub,
+          videoUrl: videoTag,
+          published: true,
+          postTypeId: selectedOptions.postType.value,
+          publishedDate: new Date(),
+          categories: [
+            {
+              categoryId: selectedOptions.category.value,
+              isMain: selectedOptions.isMain.value,
+            },
+          ],
+        };
+        console.log('게시글 ', reqData);
+        const resData = await writePost(reqData);
+        console.log('게시글 작성 완료', resData);
+      }
     } catch (error) {
-      console.error('서버 요청 오류', error);
+      console.error('게시글 작성 실패, 서버 요청 오류', error);
     }
   };
 
@@ -506,7 +570,14 @@ function Write() {
         <div className='w-full h-[64px]'></div>
         <div className='fixed bottom-0 flex justify-between px-[48px] w-1/2 h-[64px] border-t'>
           <div className='flex items-center justify-center'>뒤로가기</div>
-          <div className='flex items-center justify-center'>게시하기</div>
+          <div
+            onClick={() => {
+              handleSubmit();
+            }}
+            className='flex items-center justify-center my-2 px-2 cursor-pointer hover:bg-gray-200'
+          >
+            게시하기
+          </div>
         </div>
       </div>
       <div className='w-1/2   overflow-hidden break-words '>
