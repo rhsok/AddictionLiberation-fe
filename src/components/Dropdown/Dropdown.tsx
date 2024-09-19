@@ -27,7 +27,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     // 버튼 위치를 기준으로 드롭다운 메뉴 위치 설정
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      console.log('rect', rect);
       setPosition({
         top: rect.bottom + window.scrollY,
         left: rect.left + window.scrollX,
