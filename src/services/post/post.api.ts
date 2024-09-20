@@ -21,3 +21,8 @@ export const getMainPost = async () => {
   const response = await instance.get(`/posts/main-posts`);
   return response.data;
 };
+
+export const getPostById = async (postId: string) => {
+  const response = await instance.get(`/posts/${postId}`);
+  return response.data;
+};
