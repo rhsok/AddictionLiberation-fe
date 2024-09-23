@@ -61,6 +61,7 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
   return (
     <div className='flex flex-col items-center'>
       <div className='w-[1580px] px-[46px] '>
+        <div className='w-full h-[256px]'></div>
         <div className='pb-[60px]'>
           <p className='mt-[29px] text-[35px]'>{title}</p>
           <div className='w-full h-[2px] border border-[#D9D9D9]' />

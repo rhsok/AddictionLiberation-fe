@@ -36,6 +36,7 @@ function MainPage() {
         <div className='w-[315px] h-[932px] border border-black'></div>
       </div> */}
       <div className='flex flex-col w-[1440px]   '>
+        <div className='w-full h-[256px]'></div>
         <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
           <div
             onClick={() => {
