@@ -109,7 +109,13 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         <div className='w-full my-5 h-[2px] border border-[#D9D9D9]' />
         <div className='w-[1045px] mt-[69px] pb-10 flex flex-col gap-[46px]'>
           {selectedCategoryData?.normal.map((item: any) => (
-            <div key={item.id} className='flex flex-row '>
+            <div
+              onClick={() => {
+                router.push(`/post/${item.id}`);
+              }}
+              key={item.id}
+              className='flex flex-row '
+            >
               <div className='w-[328px] h-[190px] border bg-gray-200 shrink-0 '></div>
               <div className='ml-[46px] flex flex-col'>
                 <div className='text-[25px] font-bold'>{item.title}</div>

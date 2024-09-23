@@ -3,6 +3,11 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/components/ModalPortal';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import { uploadImage, writePost } from '@/services/post/post.api';
+import LeftSVG from '../../../public/Image/write/LeftSVG';
+import CenterSVG from '../../../public/Image/write/CenterSVG';
+import RightSVG from '../../../public/Image/write/RightSVG';
+import ImageSVG from '../../../public/Image/write/ImageSVG';
+import VideoTagSVG from '../../../public/Image/write/VideoTagSVG';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
 type DropdownKey = 'category' | 'postType' | 'isMain';
@@ -221,7 +226,7 @@ function Write() {
           // 이미지를 가운데 정렬된 상태로 삽입
           const imgHTML = `
             <div style="">
-              <img src="${e.target?.result}" style="width: 70%; cursor: pointer; float: left;" class="inserted-image">
+              <img src="${e.target?.result}" style="width: 99%; cursor: pointer; float: left;" class="inserted-image">
             </div>`;
           document.execCommand('insertHTML', false, imgHTML);
         }
@@ -283,7 +288,6 @@ function Write() {
 
       // 이미지 업로드
       try {
-        console.log('2');
         const uploadedImageUrl = await uploadImage(file); // 서버에 이미지 업로드
         console.log('이미지저장완료', uploadedImageUrl);
         images.push(uploadedImageUrl); // 업로드된 이미지 URL 저장
@@ -291,7 +295,6 @@ function Write() {
 
         // HTML 내용에서 기존 이미지 src를 업로드된 이미지 URL로 교체
         htmlContent = htmlContent.replace(imgSrc, uploadedImageUrl.filePath);
-        console.log('a', htmlContent);
         const reqData = {
           title: post.main,
           content: htmlContent,
@@ -415,7 +418,7 @@ function Write() {
             onClick={() => formatDoc('italic')}
             className='w-[48px] h-[48px] hover:bg-gray-100'
           >
-            <div className='text-[16px]'>I</div>
+            <div className='text-[16px]'>Italic</div>
           </button>
           <div className=' w-[1px] h-[20px] border mx-2 ' />
           {/* <button className='w-[48px] h-[48px] hover:bg-gray-100'>
@@ -454,15 +457,19 @@ function Write() {
           ></input>
           <label
             htmlFor='image-upload'
-            className='flex items-center justify-center w-[48px] h-[48px]  hover:bg-gray-100'
+            className='flex items-center justify-center w-[48px] h-[48px]  hover:bg-gray-100 cursor-pointer'
           >
-            <div className='text-[16px] '>Img</div>
+            <div className='text-[16px] '>
+              <ImageSVG />
+            </div>
           </label>
           <button
             onClick={() => setVideoModalActive(!isVideoModalActive)}
             className=' h-[48px] mx-4 hover:bg-gray-100'
           >
-            <div className='text-[16px]'>VideoTag</div>
+            <div className='text-[16px]'>
+              <VideoTagSVG />
+            </div>
             {isVideoModalActive && (
               <div
                 ref={modalRef}
@@ -493,7 +500,9 @@ function Write() {
               formatDoc('justifyLeft');
             }}
           >
-            <div className='text-[16px]'>Left</div>
+            <div className='text-[16px]'>
+              <LeftSVG />
+            </div>
           </button>
 
           {/* 가운데 정렬 버튼 */}
@@ -504,7 +513,9 @@ function Write() {
               formatDoc('justifyCenter');
             }}
           >
-            <div className='text-[16px]'>Center</div>
+            <div className='text-[16px]'>
+              <CenterSVG />
+            </div>
           </button>
 
           {/* 오른쪽 정렬 버튼 */}
@@ -515,7 +526,9 @@ function Write() {
               formatDoc('justifyRight');
             }}
           >
-            <div className='text-[16px]'>Right</div>
+            <div className='text-[16px]'>
+              <RightSVG />
+            </div>
           </button>
           {/* <button
             className='w-[48px] h-[48px] hover:bg-gray-100 flex justify-center items-center'
@@ -568,7 +581,7 @@ function Write() {
         </div>
 
         <div className='w-full h-[64px]'></div>
-        <div className='fixed bottom-0 flex justify-between px-[48px] w-1/2 h-[64px] border-t'>
+        <div className=' bottom-0 flex justify-between px-[48px] w-full h-[64px] border-t bg-b'>
           <div className='flex items-center justify-center'>뒤로가기</div>
           <div
             onClick={() => {

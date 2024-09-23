@@ -27,9 +27,9 @@ const Post = ({ params }: PostProps) => {
 
   return (
     <div className='flex justify-center'>
-      <div className=' w-[1580px]'>
+      <div className=' w-[1580px]  min-h-[1000px] '>
         <div className='flex flex-col items-center justify-center w-full mt-20'>
-          <p className='w-[840px] text-[40px] text-center line-clamp-2 '>
+          <p className='w-[840px] text-[45px] text-center line-clamp-2 '>
             {postdata && postdata.title}
           </p>
           <p className='w-[840px] text-[10px] text-center line-clamp-2 '>
@@ -42,9 +42,9 @@ const Post = ({ params }: PostProps) => {
         <div className='w-full flex flex-row justify-center py-10 gap-5'>
           <div
             dangerouslySetInnerHTML={{ __html: postdata?.content }}
-            className='w-[800px] shrink-0'
+            className='w-[800px] min-h-[700px] shrink-0 border'
           ></div>
-          <div className='w-[300px] shrink-0 bg-black'></div>
+          <div className='w-[300px] shrink-0 border'></div>
         </div>
       </div>
     </div>
