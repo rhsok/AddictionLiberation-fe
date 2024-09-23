@@ -61,6 +61,7 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
   return (
     <div className='flex flex-col items-center'>
       <div className='w-[1580px] px-[46px] '>
+        <div className='w-full h-[256px]'></div>
         <div className='pb-[60px]'>
           <p className='mt-[29px] text-[35px]'>{title}</p>
           <div className='w-full h-[2px] border border-[#D9D9D9]' />
@@ -109,7 +110,13 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         <div className='w-full my-5 h-[2px] border border-[#D9D9D9]' />
         <div className='w-[1045px] mt-[69px] pb-10 flex flex-col gap-[46px]'>
           {selectedCategoryData?.normal.map((item: any) => (
-            <div key={item.id} className='flex flex-row '>
+            <div
+              onClick={() => {
+                router.push(`/post/${item.id}`);
+              }}
+              key={item.id}
+              className='flex flex-row '
+            >
               <div className='w-[328px] h-[190px] border bg-gray-200 shrink-0 '></div>
               <div className='ml-[46px] flex flex-col'>
                 <div className='text-[25px] font-bold'>{item.title}</div>
