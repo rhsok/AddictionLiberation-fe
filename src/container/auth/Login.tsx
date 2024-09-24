@@ -8,6 +8,7 @@ import { AxiosError } from 'axios';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { setCookie } from 'nookies';
+import { useRouter } from 'next/navigation';
 
 function Login() {
   const {
@@ -18,6 +19,7 @@ function Login() {
   } = useForm<loginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
+  const router = useRouter();
 
   const { setAccessToken, setUser, user } = userStore();
 
@@ -54,20 +56,20 @@ function Login() {
   }, [user]);
 
   return (
-    <div className={`flex mx-auto w-[1440px]  s flex-grow`}>
-      <div className='mx-auto mt-[144px] mb-[168px] w-[623px] h-[756px] bg-white border border-black'>
-        <div className='mt-[87px] text-[50px]'>
-          <p className='text-center'>Log In</p>
+    <div className={`flex mx-auto w-[1440px]   flex-grow`}>
+      <div className='mx-auto mt-[144px] mb-[168px] w-[523px] pb-[70px] bg-white border border-black rounded-xl'>
+        <div className='mt-[47px] text-[50px]'>
+          <p className='text-center'>LogIn</p>
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className='flex flex-col items-center mt-[87px]'
+          className='flex flex-col items-center mt-[47px]'
         >
-          <div className='w-[571px]  mt-[14px] pl-[17px]'>
-            <p>email</p>
+          <div className='w-[463px]  mt-[14px] '>
+            <p className='text-[20px]'>email</p>
             <input
               {...register('email')}
-              className={`border mt-1 border-black w-[540px] h-[42px] rounded-[7px] pl-2 ${
+              className={`border mt-1  w-full h-[52px] rounded-[7px] pl-2 ${
                 errors.email?.message
                   ? 'border border-red-500'
                   : 'border-black '
@@ -83,12 +85,12 @@ function Login() {
               </p>
             )}
           </div>
-          <div className='w-[571px]  mt-[14px] pl-[17px]'>
-            <p>비밀번호</p>
+          <div className='w-[463px]  mt-[14px] '>
+            <p className='text-[20px]'>비밀번호</p>
             <input
               type='password'
               {...register('password')}
-              className={`border mt-1 border-black w-[540px] h-[42px] rounded-[7px] pl-2 ${
+              className={`border mt-1 b w-full h-[52px] rounded-[7px] pl-2 ${
                 errors.password?.message
                   ? 'border border-red-500'
                   : 'border-black '
@@ -104,9 +106,21 @@ function Login() {
               </p>
             )}
           </div>
-          <div className='flex flex-row justify-center  mt-[146px] '>
-            <button className='w-[193px] h-[47px] text-center border border-black rounded-[7px] '>
+          <div className='flex flex-row justify-center gap-10  mt-[126px] '>
+            <button
+              type='submit'
+              className='w-[193px] h-[47px] text-center border border-black rounded-[7px] '
+            >
               로그인
+            </button>
+            <button
+              onClick={(e: any) => {
+                e.preventDefault();
+                router.push('/auth/signup');
+              }}
+              className='w-[193px] h-[47px] text-center border border-black rounded-[7px] '
+            >
+              회원가입
             </button>
           </div>
         </form>

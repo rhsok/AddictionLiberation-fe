@@ -1,6 +1,6 @@
 'use client';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import ModalPortal from '@/components/ModalPortal';
+import ModalPortal from '@/components/Modal/ModalPortal';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import { uploadImage, writePost } from '@/services/post/post.api';
 import LeftSVG from '../../../public/Image/write/LeftSVG';
@@ -8,6 +8,7 @@ import CenterSVG from '../../../public/Image/write/CenterSVG';
 import RightSVG from '../../../public/Image/write/RightSVG';
 import ImageSVG from '../../../public/Image/write/ImageSVG';
 import VideoTagSVG from '../../../public/Image/write/VideoTagSVG';
+import ThumbnailModal from '@/components/Modal/ThumbnailModal/ThumbnailModal';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
 type DropdownKey = 'category' | 'postType' | 'isMain';
@@ -24,6 +25,8 @@ function Write() {
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [isLinkModalActive, setIsLinkModalActive] = useState<boolean>(false);
   const [isVideoModalActive, setVideoModalActive] = useState<boolean>(false);
+  const [thumbanilModalActive, setThumbnailModalActive] =
+    useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const [linkURL, setLinkURL] = useState<string>('');
   const [videoTag, setVideoTag] = useState<string>('');
@@ -344,6 +347,14 @@ function Write() {
     }
   };
 
+  const openModal = () => {
+    setThumbnailModalActive(true);
+  };
+
+  const closeModal = () => {
+    setThumbnailModalActive(false);
+  };
+
   useEffect(() => {
     console.log('savedRange', savedRange);
   }, [savedRange]);
@@ -351,6 +362,7 @@ function Write() {
   return (
     <div className='flex h-screen'>
       <div className='flex flex-col relative w-1/2 h-screen border-r'>
+        <div className='w-full h-[50px]'></div>
         <div className='max-h-[583px] pt-[32px] px-[48px] '>
           <textarea
             ref={textareaRef}
@@ -585,12 +597,22 @@ function Write() {
           <div className='flex items-center justify-center'>뒤로가기</div>
           <div
             onClick={() => {
-              handleSubmit();
+              // handleSubmit();
+              openModal();
             }}
             className='flex items-center justify-center my-2 px-2 cursor-pointer hover:bg-gray-200'
           >
             게시하기
           </div>
+          {thumbanilModalActive && (
+            <ModalPortal>
+              <ThumbnailModal
+                isOpen={thumbanilModalActive}
+                onClose={closeModal}
+                openModal={openModal}
+              />
+            </ModalPortal>
+          )}
         </div>
       </div>
       <div className='w-1/2   overflow-hidden break-words '>

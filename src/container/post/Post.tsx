@@ -28,7 +28,7 @@ const Post = ({ params }: PostProps) => {
   return (
     <div className='flex justify-center'>
       <div className=' w-[1580px]  min-h-[1000px] '>
-        <div className='flex flex-col items-center justify-center w-full mt-20'>
+        <div className='flex flex-col items-center justify-center w-full mt-[70px]'>
           <p className='w-[840px] text-[45px] text-center line-clamp-2 '>
             {postdata && postdata.title}
           </p>
