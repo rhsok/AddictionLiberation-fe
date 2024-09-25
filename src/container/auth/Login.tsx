@@ -56,8 +56,8 @@ function Login() {
   }, [user]);
 
   return (
-    <div className={`flex mx-auto w-[1440px]   flex-grow`}>
-      <div className='mx-auto mt-[144px] mb-[168px] w-[523px] pb-[70px] bg-white border border-black rounded-xl'>
+    <div className={`flex mx-auto w-[1440px] h-screen  `}>
+      <div className='mx-auto mt-[144px]  w-[523px] h-[660px]  bg-white border border-black rounded-xl'>
         <div className='mt-[47px] text-[50px]'>
           <p className='text-center'>LogIn</p>
         </div>
@@ -66,10 +66,10 @@ function Login() {
           className='flex flex-col items-center mt-[47px]'
         >
           <div className='w-[463px]  mt-[14px] '>
-            <p className='text-[20px]'>email</p>
+            <p className='text-[15px]'>email</p>
             <input
               {...register('email')}
-              className={`border mt-1  w-full h-[52px] rounded-[7px] pl-2 ${
+              className={`border mt-1  w-full h-[48px] rounded-[7px] pl-2 ${
                 errors.email?.message
                   ? 'border border-red-500'
                   : 'border-black '
@@ -86,11 +86,11 @@ function Login() {
             )}
           </div>
           <div className='w-[463px]  mt-[14px] '>
-            <p className='text-[20px]'>비밀번호</p>
+            <p className='text-[15px]'>비밀번호</p>
             <input
               type='password'
               {...register('password')}
-              className={`border mt-1 b w-full h-[52px] rounded-[7px] pl-2 ${
+              className={`border mt-1 b w-full h-[48px] rounded-[7px] pl-2 ${
                 errors.password?.message
                   ? 'border border-red-500'
                   : 'border-black '
@@ -106,22 +106,22 @@ function Login() {
               </p>
             )}
           </div>
-          <div className='flex flex-row justify-center gap-10  mt-[126px] '>
+          <div className='flex flex-col justify-center gap-4  mt-[86px] '>
             <button
               type='submit'
-              className='w-[193px] h-[47px] text-center border border-black rounded-[7px] '
+              className='w-[463px] h-[47px] text-center rounded-[7px] bg-black text-white hover:bg-green-500 '
             >
               로그인
             </button>
-            <button
+            <p
               onClick={(e: any) => {
                 e.preventDefault();
                 router.push('/auth/signup');
               }}
-              className='w-[193px] h-[47px] text-center border border-black rounded-[7px] '
+              className='text-[14px] cursor-pointer hover:text-green-600 '
             >
               회원가입
-            </button>
+            </p>
           </div>
         </form>
       </div>
