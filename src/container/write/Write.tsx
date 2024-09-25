@@ -1,6 +1,6 @@
 'use client';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import ModalPortal from '@/components/ModalPortal';
+import ModalPortal from '@/components/Modal/ModalPortal';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import { uploadImage, writePost } from '@/services/post/post.api';
 import LeftSVG from '../../../public/Image/write/LeftSVG';
@@ -8,6 +8,7 @@ import CenterSVG from '../../../public/Image/write/CenterSVG';
 import RightSVG from '../../../public/Image/write/RightSVG';
 import ImageSVG from '../../../public/Image/write/ImageSVG';
 import VideoTagSVG from '../../../public/Image/write/VideoTagSVG';
+import ThumbnailModal from '@/components/Modal/ThumbnailModal/ThumbnailModal';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
 type DropdownKey = 'category' | 'postType' | 'isMain';
@@ -24,6 +25,8 @@ function Write() {
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [isLinkModalActive, setIsLinkModalActive] = useState<boolean>(false);
   const [isVideoModalActive, setVideoModalActive] = useState<boolean>(false);
+  const [thumbanilModalActive, setThumbnailModalActive] =
+    useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const [linkURL, setLinkURL] = useState<string>('');
   const [videoTag, setVideoTag] = useState<string>('');
@@ -263,6 +266,7 @@ function Write() {
   };
 
   const handleSubmit = async () => {
+    validateFunction();
     if (!editorRef.current) return;
     let htmlContent = editorRef.current.innerHTML; // contentEditable에서 HTML 가져오기
 
@@ -271,7 +275,6 @@ function Write() {
     const regex = /<img[^>]+src="([^">]+)"/g; // img 태그의 src 속성을 찾기 위한 정규 표현식
     let match;
 
-    console.log('1');
     let file;
     while ((match = regex.exec(htmlContent)) !== null) {
       const imgSrc = match[1]; // img 태그의 src 값
@@ -311,13 +314,12 @@ function Write() {
           ],
         };
         const resData = await writePost(reqData);
-        console.log('게시글 작성 완료', resData);
+        alert('게시글 작성 완료');
       } catch (error) {
         console.error('게시글 작성 중 오류 발생:', error);
       }
     }
 
-    // console.log('submit', reqData);
     try {
       if (!selectedImage) {
         const reqData = {
@@ -338,19 +340,41 @@ function Write() {
         console.log('게시글 ', reqData);
         const resData = await writePost(reqData);
         console.log('게시글 작성 완료', resData);
+        alert('게시글 작성 완료');
       }
     } catch (error) {
       console.error('게시글 작성 실패, 서버 요청 오류', error);
     }
   };
 
+  const validateFunction = () => {
+    if (post.main === '' || post.sub === ' ' || post.htmlContent === '')
+      return alert('내용을 입력해 주세요.');
+    if (
+      selectedOptions.category.label === '카테고리' ||
+      selectedOptions.postType.label === '포스트 타입' ||
+      selectedOptions.isMain.label === '메인여부'
+    )
+      return alert('카테고리를 선택해 주세요');
+    openModal();
+  };
+
+  const openModal = () => {
+    setThumbnailModalActive(true);
+  };
+
+  const closeModal = () => {
+    setThumbnailModalActive(false);
+  };
+
   useEffect(() => {
-    console.log('savedRange', savedRange);
-  }, [savedRange]);
+    console.log('selectedOptions', selectedOptions);
+  }, [selectedOptions]);
 
   return (
     <div className='flex h-screen'>
       <div className='flex flex-col relative w-1/2 h-screen border-r'>
+        <div className='w-full h-[50px]'></div>
         <div className='max-h-[583px] pt-[32px] px-[48px] '>
           <textarea
             ref={textareaRef}
@@ -453,7 +477,7 @@ function Write() {
             accept='image/*'
             id='image-upload'
             onChange={handleInsertImage}
-            className='hidden '
+            className='hidden'
           ></input>
           <label
             htmlFor='image-upload'
@@ -465,9 +489,9 @@ function Write() {
           </label>
           <button
             onClick={() => setVideoModalActive(!isVideoModalActive)}
-            className=' h-[48px] mx-4 hover:bg-gray-100'
+            className=' h-[48px] ml-1  hover:bg-gray-100'
           >
-            <div className='text-[16px]'>
+            <div className='text-[16px] px-3'>
               <VideoTagSVG />
             </div>
             {isVideoModalActive && (
@@ -585,12 +609,27 @@ function Write() {
           <div className='flex items-center justify-center'>뒤로가기</div>
           <div
             onClick={() => {
-              handleSubmit();
+              // handleSubmit();
+              validateFunction();
             }}
             className='flex items-center justify-center my-2 px-2 cursor-pointer hover:bg-gray-200'
           >
             게시하기
           </div>
+          {thumbanilModalActive && (
+            <ModalPortal>
+              <ThumbnailModal
+                videoTag={videoTag}
+                handleSubmit={handleSubmit}
+                selectedImage={selectedImage}
+                selectedOptions={selectedOptions}
+                post={post}
+                isOpen={thumbanilModalActive}
+                onClose={closeModal}
+                openModal={openModal}
+              />
+            </ModalPortal>
+          )}
         </div>
       </div>
       <div className='w-1/2   overflow-hidden break-words '>

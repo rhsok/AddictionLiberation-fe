@@ -1,10 +1,9 @@
-import MainPage from '@/container/main/MainPage';
-import Image from 'next/image';
+'use client';
+
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <main>
-      <MainPage />
-    </main>
-  );
+  const router = useRouter();
+  router.push('/main');
+  return <></>;
 }
