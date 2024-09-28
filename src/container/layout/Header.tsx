@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -30,14 +29,14 @@ function Header() {
 
   return (
     <div
-      style={{ height: `${headerHeight}px` }}
-      className='fixed flex flex-col items-center w-full   bg-[#32B67A]  z-10 '
+      style={{ height: `${headerHeight}px`, transition: 'height 0.15s ease' }}
+      className={`fixed flex flex-col items-center w-full   bg-[#32B67A]  z-10 transform transition-transform duration-300 `}
     >
       <div
         onClick={() => {
           router.push('/auth/login');
         }}
-        className='absolute top-3 right-10 text-white'
+        className='absolute top-3 right-10 text-white cursor-pointer'
       >
         login
       </div>
@@ -47,7 +46,7 @@ function Header() {
             onClick={() => {
               router.push('/main');
             }}
-            className={` text-[70px] text-white mt-[22px]  `}
+            className={` text-[70px] text-white mt-[22px]  cursor-pointer `}
           >
             Addiction liberation journal
           </div>

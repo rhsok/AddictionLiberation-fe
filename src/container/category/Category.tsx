@@ -37,7 +37,6 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
   useEffect(() => {
     const id = switchTitleToId(params.categoryId);
     const data = switchTitle(params.categoryId);
-    console.log('id', id);
 
     setTitle(data || '');
     const getCategoryPost = async () => {

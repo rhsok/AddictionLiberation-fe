@@ -1,6 +1,11 @@
 import Image from 'next/image';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
+interface ThumbnailImage {
+  file: File | undefined; // File 타입이거나 undefined
+  url: string; // 문자열
+}
+
 interface ThumbnailModalType {
   isOpen: boolean;
   onClose: () => void;
@@ -16,6 +21,8 @@ interface ThumbnailModalType {
   selectedImage: File | null;
   handleSubmit: () => void;
   videoTag: string;
+  thumbnailImage: ThumbnailImage; // 위에서 정의한 타입
+  setThumbnailImage: React.Dispatch<React.SetStateAction<ThumbnailImage>>; // 상태 업데이트 함수 타입
 }
 
 function ThumbnailModal({
@@ -26,11 +33,13 @@ function ThumbnailModal({
   post,
   videoTag,
   handleSubmit,
+  setThumbnailImage,
+  thumbnailImage,
 }: ThumbnailModalType) {
   const [slideOver, setSlideOver] = useState(false);
   const [slideOut, setSlideOut] = useState(false);
-  const [thumbanilImage, setThumbnailImage] = useState<File | undefined>();
-  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string>('');
+  // const [thumbanilImage, setThumbnailImage] = useState<File | undefined>();
+  // const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
@@ -48,8 +57,13 @@ function ThumbnailModal({
   const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const file = event.target.files[0];
-      setThumbnailImage(event.target.files[0]);
-      setThumbnailImageUrl(URL.createObjectURL(file));
+      const data = {
+        file: file,
+        url: URL.createObjectURL(file),
+      };
+      setThumbnailImage(data);
+      // setThumbnailImage((ㅔㄱㄷ));
+      // setThumbnailImageUrl(URL.createObjectURL(file));
     }
   };
 
@@ -78,12 +92,12 @@ function ThumbnailModal({
           htmlFor='thumbanilImage'
           className='flex flex-col items-center justify-center text-white text-[20px] w-[320px] h-[200px] bg-gray-200 mx-auto overflow-hidden border'
         >
-          {thumbanilImage ? (
+          {thumbnailImage.file ? (
             <>
               <Image
                 width={320}
                 height={200}
-                src={thumbnailImageUrl}
+                src={thumbnailImage.url}
                 alt={'thumbnailImage'}
               />
             </>
