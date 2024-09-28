@@ -31,6 +31,14 @@ function Write() {
   const [linkURL, setLinkURL] = useState<string>('');
   const [videoTag, setVideoTag] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [thumbnailImage, setThumbnailImage] = useState<{
+    file: File | undefined;
+    url: string;
+  }>({
+    file: undefined,
+    url: '',
+  });
+
   const [post, setPost] = useState<{
     main: string;
     sub: string;
@@ -266,7 +274,23 @@ function Write() {
   };
 
   const handleSubmit = async () => {
+    //유효성검사
     validateFunction();
+
+    //썸네일 이미지 저장후 url 받기
+    let thumbnailUrl;
+    try {
+      if (!thumbnailImage.file) return;
+      const blob = new Blob([thumbnailImage.file], {
+        type: thumbnailImage.file.type,
+      });
+      thumbnailUrl = await uploadImage(blob); // 서버에 이미지 업로드
+    } catch (error) {
+      console.log('썸네일 이미지 등록 실패', error);
+      alert('이미지 등록에 실패했습니다');
+      return;
+    }
+
     if (!editorRef.current) return;
     let htmlContent = editorRef.current.innerHTML; // contentEditable에서 HTML 가져오기
 
@@ -306,6 +330,7 @@ function Write() {
           published: true,
           postTypeId: selectedOptions.postType.value,
           publishedDate: new Date(),
+          thumbnailImageURL: thumbnailUrl.filePath,
           categories: [
             {
               categoryId: selectedOptions.category.value,
@@ -330,6 +355,7 @@ function Write() {
           published: true,
           postTypeId: selectedOptions.postType.value,
           publishedDate: new Date(),
+          thumbnailImageURL: thumbnailUrl.filePath,
           categories: [
             {
               categoryId: selectedOptions.category.value,
@@ -627,6 +653,8 @@ function Write() {
                 isOpen={thumbanilModalActive}
                 onClose={closeModal}
                 openModal={openModal}
+                setThumbnailImage={setThumbnailImage}
+                thumbnailImage={thumbnailImage}
               />
             </ModalPortal>
           )}
