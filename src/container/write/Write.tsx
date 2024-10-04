@@ -76,6 +76,7 @@ function Write() {
       { label: 'Youtube', value: 1 },
       { label: 'Alcoholism', value: 2 },
       { label: 'Game', value: 3 },
+      { label: 'About Addiction', value: 4 },
     ],
     postType: [
       { label: 'Main', value: 1 },
@@ -284,6 +285,7 @@ function Write() {
       const blob = new Blob([thumbnailImage.file], {
         type: thumbnailImage.file.type,
       });
+      console.log('썸네일이미지', blob);
       thumbnailUrl = await uploadImage(blob); // 서버에 이미지 업로드
     } catch (error) {
       console.log('썸네일 이미지 등록 실패', error);
@@ -621,7 +623,7 @@ function Write() {
             </div>
           ))}
         </div>
-        <div className='px-[48px]  flex flex-1 overflow-y-scroll '>
+        <div className='px-[48px] mt-2  flex flex-1 overflow-y-scroll '>
           <div
             ref={editorRef}
             contentEditable
