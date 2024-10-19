@@ -42,7 +42,7 @@ const Post = ({ params }: PostProps) => {
         <div className='w-full flex flex-row justify-center py-10 gap-5'>
           <div
             dangerouslySetInnerHTML={{ __html: postdata?.content }}
-            className='w-[800px] min-h-[700px] shrink-0 border'
+            className='w-[800px] min-h-[700px] shrink-0 border py-10 px-5'
           ></div>
           <div className='w-[300px] shrink-0 border'></div>
         </div>

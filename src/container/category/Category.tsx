@@ -20,6 +20,8 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         return '2';
       case 'game':
         return '3';
+      case 'aboutAddiction':
+        return '4';
     }
   };
 
@@ -31,6 +33,8 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         return 'ALCHOLSIM';
       case 'game':
         return 'GAME ADDICTION';
+      case 'aboutAddiction':
+        return 'About Addiction';
     }
   };
 
@@ -51,10 +55,10 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
   }, [params]);
 
   useEffect(() => {
-    console.log(
-      'selectedCategoryData?.main[0].videoUrl',
-      selectedCategoryData?.main[0].videoUrl
-    );
+    // console.log(
+    //   'selectedCategoryData?.main[0].videoUrl',
+    //   selectedCategoryData?.main[0].videoUrl
+    // );
   }, [selectedCategoryData]);
 
   return (
@@ -63,32 +67,43 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         <div className='w-full h-[256px]'></div>
         <div className='pb-[60px]'>
           <p className='mt-[29px] text-[35px]'>{title}</p>
-          <div className='w-full h-[2px] border border-[#D9D9D9]' />
+          <div className='w-full h-[2px] border border-[#D9D9D9]'></div>
           <div className='flex'>
             <div className='shrink-0 w-[1045px] pt-[29px]'>
-              <div
-                // dangerouslySetInnerHTML={{
-                //   __html: selectedCategoryData?.main[0].videoUrl,
-                // }}
-                className='w-full h-[583px] border '
-              ></div>
               <div
                 onClick={() => {
                   router.push(`/post/${selectedCategoryData?.main[0].id}`);
                 }}
-                className='mt-[38px] text-[40px] font-bold line-clamp-2'
+                className='w-full h-[583px] border '
+              >
+                <img
+                  src={selectedCategoryData?.main[0].thumbanilImageURL}
+                  alt=''
+                  className='w-full h-full cursor-pointer'
+                />
+              </div>
+              <div
+                onClick={() => {
+                  router.push(`/post/${selectedCategoryData?.main[0].id}`);
+                }}
+                className='mt-[38px] text-[40px] font-bold line-clamp-2 cursor-pointer '
               >
                 {selectedCategoryData?.main[0].title}
               </div>
               <div className='flex flex-row mt-[49px] gap-[53px] '>
                 {selectedCategoryData?.main.slice(1).map((item: any) => (
                   <div className='w-[310px]' key={item.id}>
-                    <div className=' h-[190px] border'></div>
                     <div
                       onClick={() => {
                         router.push(`/post/${item.id}`);
                       }}
-                      className='mt-5 text-[20px] font-bold line-clamp-2'
+                      className=' h-[190px] border'
+                    ></div>
+                    <div
+                      onClick={() => {
+                        router.push(`/post/${item.id}`);
+                      }}
+                      className='mt-5 text-[20px] font-bold line-clamp-2 cursor-pointer '
                     >
                       {item.title}
                     </div>
