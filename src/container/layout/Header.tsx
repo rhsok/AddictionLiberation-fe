@@ -107,6 +107,14 @@ function Header() {
             <div className='flex gap-10 w-[1440px] py-5 text-[21px]  text-green-500 '>
               <div
                 onClick={() => {
+                  router.push('/categories/aboutAddiction');
+                }}
+                className='cursor-pointer hover:text-white '
+              >
+                About Addiction
+              </div>
+              <div
+                onClick={() => {
                   router.push('/categories/youtube');
                 }}
                 className='cursor-pointer hover:text-white '

@@ -34,7 +34,14 @@ function MainPage() {
       <div className='flex flex-row w-[1784px]'>
         {/* current issue */}
         <div className=' mt-[23px] w-[1440px] pl-[52px]'>
-          <div className='text-[35px] cursor-pointer'>About Addiction</div>
+          <div
+            onClick={() => {
+              router.push(`/categories/aboutAddiction`);
+            }}
+            className='text-[35px] cursor-pointer'
+          >
+            About Addiction
+          </div>
           <div className=' mt-[15px] flex '>
             <div className='w-[540px] h-[337px] bg-gray-200 rounded-lg  '>
               <img
@@ -43,31 +50,48 @@ function MainPage() {
                 }}
                 src={data?.main[0].thumbnailImageURL}
                 alt=''
-                className='w-full h-full rounded-lg'
+                className='w-full h-full rounded-lg cursor-pointer'
               />
             </div>
             <div className='w-[790px] ml-[54px]'>
-              <p className='w-[760px] text-[30px] line-clamp-2 mt-10'>
+              <p
+                onClick={() => {
+                  router.push(`/post/${data?.main[0].id}`);
+                }}
+                className='w-[760px] text-[30px] line-clamp-2 mt-10 cursor-pointer'
+              >
                 {data?.main[0].title}
               </p>
-              <div className='w-[760px] text-[20px] mt-5'>
+              <div
+                onClick={() => {
+                  router.push(`/post/${data?.main[0].id}`);
+                }}
+                className='w-[760px] text-[20px] mt-5 cursor-pointer'
+              >
                 {data?.main[0].subtitle}
               </div>
             </div>
           </div>
           <div className='flex flex-row pl-[12px] py-[64px] gap-[50px]'>
             {data?.main.slice(1).map((item: any) => (
-              <div className='w-[410px] h-[337px] px-[24px] pt-[16px] border'>
+              <div
+                key={item.id}
+                className='w-[410px] h-[337px] px-[24px] pt-[16px] border'
+              >
                 <div className='w-full'>
                   <div className='h-[202px] '>
                     <img
                       src={item.thumbnailImageURL}
                       alt=''
-                      className='w-full h-full '
+                      className='w-full h-full cursor-pointer'
                     />
                   </div>
-                  <p className=' mt-3 line-clamp-2 text-[20px]	'>{item.title}</p>
-                  <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
+                  <p className=' mt-3 line-clamp-2 text-[20px]  cursor-pointer	'>
+                    {item.title}
+                  </p>
+                  <p className='mt-1 line-clamp-2 cursor-pointer'>
+                    {item.subtitle}
+                  </p>
                 </div>
               </div>
             ))}
@@ -143,9 +167,19 @@ function MainPage() {
                     className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
                   >
                     <div className='w-[360px] '>
-                      <div className='h-[202px] bg-gray-200'></div>
-                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
-                      <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
+                      <div className='h-[202px] bg-gray-200'>
+                        <img
+                          src={item.thumbnailImageURL}
+                          alt=''
+                          className='w-full h-full cursor-pointer'
+                        />
+                      </div>
+                      <p className=' mt-3 line-clamp-2	cursor-pointer'>
+                        {item.title}
+                      </p>
+                      <p className='mt-1 line-clamp-2 cursor-pointer'>
+                        {item.subtitle}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -172,9 +206,19 @@ function MainPage() {
                     className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
                   >
                     <div className='w-[360px] '>
-                      <div className='h-[202px] bg-gray-200'></div>
-                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
-                      <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
+                      <div className='h-[202px] bg-gray-200 cursor-pointer'>
+                        <img
+                          src={item.thumbnailImageURL}
+                          alt=''
+                          className='w-full h-full cursor-pointer'
+                        />
+                      </div>
+                      <p className=' mt-3 line-clamp-2	cursor-pointer'>
+                        {item.title}
+                      </p>
+                      <p className='mt-1 line-clamp-2 cursor-pointer'>
+                        {item.subtitle}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -201,7 +245,13 @@ function MainPage() {
                     className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
                   >
                     <div className='w-[360px] '>
-                      <div className='h-[202px] bg-gray-200'></div>
+                      <div className='h-[202px] bg-gray-200'>
+                        <img
+                          src={item.thumbnailImageURL}
+                          alt=''
+                          className='w-full h-full cursor-pointer'
+                        />
+                      </div>
                       <p className=' mt-3 line-clamp-2	'>{item.title}</p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
                     </div>

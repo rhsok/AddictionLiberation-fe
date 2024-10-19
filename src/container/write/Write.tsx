@@ -23,6 +23,7 @@ interface IDropdownRefs {
 function Write() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const lastRangeRef = useRef<Range | null>(null);
   const [isLinkModalActive, setIsLinkModalActive] = useState<boolean>(false);
   const [isVideoModalActive, setVideoModalActive] = useState<boolean>(false);
   const [thumbanilModalActive, setThumbnailModalActive] =
@@ -154,11 +155,26 @@ function Write() {
     }
   }, [isPlaceholderActive]);
 
-  const handleEditableInput = () => {
+  const handlefocus = () => {
     if (editorRef.current && isPlaceholderActive) {
-      editorRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
       setIsPlaceholderActive(false);
+      editorRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
     }
+  };
+
+  const handleEditableInput = () => {
+    //클릭시 플레이스 홀더 사라짐
+    if (editorRef.current && isPlaceholderActive) {
+      setIsPlaceholderActive(false);
+      editorRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
+    }
+    //마지막 커서위치
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      lastRangeRef.current = selection.getRangeAt(0);
+      console.log('Current Range:', lastRangeRef.current);
+    }
+    //게시글 내용
     if (editorRef.current) {
       setPost((prev) => {
         return {
@@ -227,6 +243,29 @@ function Write() {
     }
   };
 
+  // const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       if (editorRef.current) {
+  //         editorRef.current.focus();
+  //         // 이미지를 가운데 정렬된 상태로 삽입
+  //         const imgHTML = `
+  //           <div style="">
+  //             <img src="${e.target?.result}" style="width: 99%; cursor: pointer; float: left;" class="inserted-image">
+  //           </div>`;
+  //         document.execCommand('insertHTML', false, imgHTML);
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  //   if (event.target.files) {
+  //     setSelectedImage(event.target.files[0]);
+  //   }
+  // };
+
   const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
@@ -235,12 +274,49 @@ function Write() {
       reader.onload = (e) => {
         if (editorRef.current) {
           editorRef.current.focus();
-          // 이미지를 가운데 정렬된 상태로 삽입
-          const imgHTML = `
-            <div style="">
-              <img src="${e.target?.result}" style="width: 99%; cursor: pointer; float: left;" class="inserted-image">
-            </div>`;
-          document.execCommand('insertHTML', false, imgHTML);
+          const range = lastRangeRef.current;
+          if (range) {
+            range.deleteContents();
+            const imgElement = document.createElement('img');
+            imgElement.src = e.target?.result as string;
+            imgElement.style.width = '99%';
+            imgElement.style.cursor = 'pointer';
+            range.insertNode(imgElement);
+
+            // 이미지 뒤에 커서를 위치시키기 위한 텍스트 노드 추가
+            const space = document.createTextNode(' ');
+            range.insertNode(space);
+
+            // 삽입된 이미지 뒤로 커서 이동
+            range.setStartAfter(imgElement);
+            range.setEndAfter(imgElement);
+            const selection = window.getSelection();
+            selection?.removeAllRanges();
+            selection?.addRange(range);
+          } else {
+            const selection = window.getSelection();
+            const firstRange = selection?.rangeCount
+              ? selection.getRangeAt(0)
+              : null;
+            if (firstRange) {
+              firstRange.deleteContents();
+              const imgElement = document.createElement('img');
+              imgElement.src = e.target?.result as string;
+              imgElement.style.width = '99%';
+              imgElement.style.cursor = 'pointer';
+              firstRange.insertNode(imgElement);
+
+              // 이미지 뒤에 커서를 위치시키기 위한 텍스트 노드 추가
+              const space = document.createTextNode(' ');
+              firstRange.insertNode(space);
+
+              // 삽입된 이미지 뒤로 커서 이동
+              firstRange.setStartAfter(imgElement);
+              firstRange.setEndAfter(imgElement);
+              selection?.removeAllRanges();
+              selection?.addRange(firstRange);
+            }
+          }
         }
       };
       reader.readAsDataURL(file);
@@ -396,8 +472,8 @@ function Write() {
   };
 
   useEffect(() => {
-    console.log('selectedOptions', selectedOptions);
-  }, [selectedOptions]);
+    console.log('lastRangeRef', lastRangeRef);
+  }, [lastRangeRef]);
 
   return (
     <div className='flex h-screen'>
@@ -627,6 +703,7 @@ function Write() {
           <div
             ref={editorRef}
             contentEditable
+            onFocus={handlefocus}
             onInput={handleEditableInput}
             className='px-4 py-2 w-full outline-none  bg-slate-100 overflow-y-scroll  '
           />
