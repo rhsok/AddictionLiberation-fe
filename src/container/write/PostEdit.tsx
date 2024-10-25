@@ -20,7 +20,7 @@ interface IDropdownRefs {
   isMain: React.RefObject<HTMLDivElement>;
 }
 
-function Write() {
+function PostEdit() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
   const lastRangeRef = useRef<Range | null>(null);
@@ -777,4 +777,4 @@ function Write() {
   );
 }
 
-export default Write;
+export default PostEdit;
