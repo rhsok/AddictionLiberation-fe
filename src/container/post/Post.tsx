@@ -1,6 +1,7 @@
 'use client';
 import { getPostById } from '@/services/post/post.api';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PostProps {
   params: { postId: string };
@@ -8,9 +9,9 @@ interface PostProps {
 
 const Post = ({ params }: PostProps) => {
   const [postdata, setPostData] = useState<any>();
+  const router = useRouter();
 
   useEffect(() => {
-    console.log('params', params);
     const fetchPost = async () => {
       try {
         const resData = await getPostById(params.postId);
@@ -27,8 +28,8 @@ const Post = ({ params }: PostProps) => {
 
   return (
     <div className='flex justify-center'>
-      <div className=' w-[1580px]  min-h-[1000px] '>
-        <div className='flex flex-col items-center justify-center w-full mt-[70px]'>
+      <div className='relative w-[1580px]  min-h-[1000px]  '>
+        <div className='flex flex-col items-center justify-center w-full mt-[70px] min-h-[112px]'>
           <p className='w-[840px] text-[45px] text-center line-clamp-2 '>
             {postdata && postdata.title}
           </p>
@@ -38,6 +39,19 @@ const Post = ({ params }: PostProps) => {
           <p className='w-[840px] text-[20px] text-center text-gray-500 '>
             {postdata && postdata.subtitle}
           </p>
+        </div>
+        <div className='absolute flex gap-4 top-[150px] right-[190px] '>
+          <button
+            onClick={() => {
+              router.push(`/postEdit/${params.postId}`);
+            }}
+            className='border border-black p-2 px-4 cursor-pointer rounded-lg bg-gray-300 hover:bg-gray-100 focus:bg-gray-200'
+          >
+            수정
+          </button>
+          <button className='border border-black p-2 px-4 cursor-pointer rounded-lg hover:bg-gray-100 focus:bg-gray-200'>
+            삭제
+          </button>
         </div>
         <div className='w-full flex flex-row justify-center py-10 gap-5'>
           <div
