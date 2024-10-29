@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/components/Modal/ModalPortal';
 import Dropdown from '@/components/Dropdown/Dropdown';
-import { uploadImage, writePost } from '@/services/post/post.api';
+import { getPostById, uploadImage, writePost } from '@/services/post/post.api';
 import LeftSVG from '../../../public/Image/write/LeftSVG';
 import CenterSVG from '../../../public/Image/write/CenterSVG';
 import RightSVG from '../../../public/Image/write/RightSVG';
@@ -20,7 +20,14 @@ interface IDropdownRefs {
   isMain: React.RefObject<HTMLDivElement>;
 }
 
-function PostEdit() {
+interface PostEditProps {
+  params: { postId: string };
+}
+
+function PostEdit({ params }: PostEditProps) {
+  //게시글 정보
+  const [postdata, setPostData] = useState<any>();
+  //에디터 정보
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
   const lastRangeRef = useRef<Range | null>(null);
@@ -491,8 +498,16 @@ function PostEdit() {
   };
 
   useEffect(() => {
-    console.log('lastRangeRef', lastRangeRef);
-  }, [lastRangeRef]);
+    console.log('params', params.postId);
+    const fetchPost = async () => {
+      try {
+        const resData = await getPostById(params.postId);
+        console.log('res', resData);
+        setPostData(resData);
+      } catch (error) {}
+    };
+    fetchPost();
+  }, [params]);
 
   return (
     <div className='flex h-screen'>
