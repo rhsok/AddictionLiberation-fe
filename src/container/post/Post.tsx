@@ -2,6 +2,7 @@
 import { getPostById } from '@/services/post/post.api';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import postStore from '@/states/postStore/postStore';
 
 interface PostProps {
   params: { postId: string };
@@ -10,6 +11,7 @@ interface PostProps {
 const Post = ({ params }: PostProps) => {
   const [postdata, setPostData] = useState<any>();
   const router = useRouter();
+  const { setPost, post } = postStore();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -17,14 +19,15 @@ const Post = ({ params }: PostProps) => {
         const resData = await getPostById(params.postId);
         console.log('res', resData);
         setPostData(resData);
+        setPost(resData);
       } catch (error) {}
     };
     fetchPost();
   }, [params]);
 
   useEffect(() => {
-    console.log('postdata', postdata);
-  }, [postdata]);
+    console.log('post', post);
+  }, [post]);
 
   return (
     <div className='flex justify-center'>

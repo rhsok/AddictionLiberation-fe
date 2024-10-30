@@ -7,6 +7,8 @@ export interface PostType {
   authorId: string;
   categories: {
     category: { id: number; name: string; description: string };
+    isMain: boolean;
+    order: number;
   }[];
   content: string;
   createAt: string;
@@ -16,7 +18,7 @@ export interface PostType {
   publishedDate: string;
   subtitle: string;
   thumbnailImageURL: string;
-  title: String;
+  title: string;
   updateAt: string;
   videoUrl: string;
 }

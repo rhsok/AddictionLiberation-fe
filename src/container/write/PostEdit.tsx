@@ -9,6 +9,8 @@ import RightSVG from '../../../public/Image/write/RightSVG';
 import ImageSVG from '../../../public/Image/write/ImageSVG';
 import VideoTagSVG from '../../../public/Image/write/VideoTagSVG';
 import ThumbnailModal from '@/components/Modal/ThumbnailModal/ThumbnailModal';
+import postStore from '@/states/postStore/postStore';
+import { PostType } from '@/types/postStore/postStore.types';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
 type DropdownKey = 'category' | 'postType' | 'isMain';
@@ -26,7 +28,8 @@ interface PostEditProps {
 
 function PostEdit({ params }: PostEditProps) {
   //게시글 정보
-  const [postdata, setPostData] = useState<any>();
+  const { setPost, post } = postStore();
+  const [postdata, setPostData] = useState<PostType>();
   //에디터 정보
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const subTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -47,7 +50,7 @@ function PostEdit({ params }: PostEditProps) {
     url: '',
   });
 
-  const [post, setPost] = useState<{
+  const [editPost, setEditPost] = useState<{
     main: string;
     sub: string;
     htmlContent: string;
@@ -125,7 +128,7 @@ function PostEdit({ params }: PostEditProps) {
       const newHeight = Math.min(textareaRef.current.scrollHeight, 200);
       textareaRef.current.style.height = `${newHeight}px`;
     }
-    setPost((prev) => {
+    setEditPost((prev) => {
       return { ...prev, main: event.target.value };
     });
   };
@@ -137,7 +140,7 @@ function PostEdit({ params }: PostEditProps) {
       const newHeight = Math.min(subTextareaRef.current.scrollHeight, 100);
       subTextareaRef.current.style.height = `${newHeight}px`;
     }
-    setPost((prev) => {
+    setEditPost((prev) => {
       return { ...prev, sub: event.target.value };
     });
   };
@@ -171,10 +174,10 @@ function PostEdit({ params }: PostEditProps) {
 
   const handleEditableInput = () => {
     //클릭시 플레이스 홀더 사라짐
-    if (editorRef.current && isPlaceholderActive) {
-      setIsPlaceholderActive(false);
-      editorRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
-    }
+    // if (editorRef.current && isPlaceholderActive) {
+    //   setIsPlaceholderActive(false);
+    //   editorRef.current.textContent = ''; // Clear the placeholder only once when the user starts typing.
+    // }
     //마지막 커서위치
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
@@ -183,7 +186,7 @@ function PostEdit({ params }: PostEditProps) {
     }
     //게시글 내용
     if (editorRef.current) {
-      setPost((prev) => {
+      setEditPost((prev) => {
         return {
           ...prev,
           htmlContent: editorRef.current!.innerHTML,
@@ -427,9 +430,9 @@ function PostEdit({ params }: PostEditProps) {
         // HTML 내용에서 기존 이미지 src를 업로드된 이미지 URL로 교체
         htmlContent = htmlContent.replace(imgSrc, uploadedImageUrl.filePath);
         const reqData = {
-          title: post.main,
+          title: editPost.main,
           content: htmlContent,
-          subtitle: post.sub,
+          subtitle: editPost.sub,
           videoUrl: videoTag,
           published: true,
           postTypeId: selectedOptions.postType.value,
@@ -452,9 +455,9 @@ function PostEdit({ params }: PostEditProps) {
     try {
       if (!selectedImage) {
         const reqData = {
-          title: post.main,
-          content: post.htmlContent,
-          subtitle: post.sub,
+          title: editPost.main,
+          content: editPost.htmlContent,
+          subtitle: editPost.sub,
           videoUrl: videoTag,
           published: true,
           postTypeId: selectedOptions.postType.value,
@@ -478,7 +481,11 @@ function PostEdit({ params }: PostEditProps) {
   };
 
   const validateFunction = () => {
-    if (post.main === '' || post.sub === ' ' || post.htmlContent === '')
+    if (
+      editPost.main === '' ||
+      editPost.sub === ' ' ||
+      editPost.htmlContent === ''
+    )
       return alert('내용을 입력해 주세요.');
     if (
       selectedOptions.category.label === '카테고리' ||
@@ -497,17 +504,72 @@ function PostEdit({ params }: PostEditProps) {
     setThumbnailModalActive(false);
   };
 
+  //게시글 정보 불러오기
   useEffect(() => {
-    console.log('params', params.postId);
+    //post에서 전역변수로 데이터를 저장해서 불러 올 수 없으면 데이터를 요청한다.
+    console.log('post', post);
+    if (post) return;
     const fetchPost = async () => {
       try {
         const resData = await getPostById(params.postId);
-        console.log('res', resData);
+        setPost(resData);
+        console.log('resData', resData);
         setPostData(resData);
       } catch (error) {}
     };
     fetchPost();
-  }, [params]);
+  }, [params, post]);
+
+  //title, content, subtitle, category 매핑
+  useEffect(() => {
+    if (!post) return;
+    if (post?.title && textareaRef.current) {
+      textareaRef.current.value = post.title;
+      setEditPost((prev) => {
+        return { ...prev, main: post.title };
+      });
+    }
+    if (post?.subtitle && subTextareaRef.current) {
+      subTextareaRef.current.value = post.subtitle;
+      setEditPost((prev) => {
+        return { ...prev, sub: post.subtitle };
+      });
+    }
+    if (post?.content && editorRef.current) {
+      handlefocus();
+      editorRef.current.innerHTML = post.content;
+      setEditPost((prev) => {
+        return { ...prev, htmlContent: post.content };
+      });
+    }
+
+    // category, postType, isMain 값 모두 설정
+    const category =
+      post.categories?.length > 0
+        ? dropdownOptions.category.find(
+            (option) => option.value === post.categories[0].category.id
+          )
+        : selectedOptions.category;
+
+    const isMain =
+      post.categories?.length > 0
+        ? dropdownOptions.isMain.find(
+            (option) => option.value === post.categories[0].isMain
+          )
+        : selectedOptions.isMain;
+
+    const postType =
+      dropdownOptions.postType.find(
+        (option) => option.value === post.postTypeId
+      ) || selectedOptions.postType;
+
+    setSelectedOptions((prev) => ({
+      ...prev,
+      category: category || prev.category,
+      postType: postType || prev.postType,
+      isMain: isMain || prev.isMain,
+    }));
+  }, [post]);
 
   return (
     <div className='flex h-screen'>
@@ -762,7 +824,7 @@ function PostEdit({ params }: PostEditProps) {
                 handleSubmit={handleSubmit}
                 selectedImage={selectedImage}
                 selectedOptions={selectedOptions}
-                post={post}
+                editPost={editPost}
                 isOpen={thumbanilModalActive}
                 onClose={closeModal}
                 openModal={openModal}
@@ -776,15 +838,15 @@ function PostEdit({ params }: PostEditProps) {
       <div className='w-1/2   overflow-hidden break-words '>
         <div className='w-full h-screen pt-[32px] px-[48px] overflow-y-scroll'>
           <pre className='w-full mt-4 whitespace-pre-wrap min-h-[56px] text-[44px] font-bold'>
-            {post.main}
+            {editPost.main}
           </pre>
           <div className='w-full h-[4px] border border-black bg-black'></div>
           <pre className='w-full mt-4 text-[24px] min-h-[30px] whitespace-pre-wrap '>
-            {post.sub}
+            {editPost.sub}
           </pre>
           <div
             className='my-4 px-4 py-2 w-full h-[calc(100%-200px)]  bg-slate-100 flex-1  whitespace-pre-wrap overflow-y-scroll'
-            dangerouslySetInnerHTML={{ __html: post.htmlContent }}
+            dangerouslySetInnerHTML={{ __html: editPost.htmlContent }}
           />
         </div>
       </div>

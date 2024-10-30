@@ -13,7 +13,7 @@ interface ThumbnailModalType {
   selectedOptions: {
     [key: string]: { label: string; value: number | boolean };
   };
-  post: {
+  editPost: {
     main: string;
     sub: string;
     htmlContent: string;
@@ -30,7 +30,7 @@ function ThumbnailModal({
   onClose,
   openModal,
   selectedOptions,
-  post,
+  editPost,
   videoTag,
   handleSubmit,
   setThumbnailImage,
