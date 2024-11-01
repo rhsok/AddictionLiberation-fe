@@ -23,6 +23,7 @@ interface ThumbnailModalType {
   videoTag: string;
   thumbnailImage: ThumbnailImage; // 위에서 정의한 타입
   setThumbnailImage: React.Dispatch<React.SetStateAction<ThumbnailImage>>; // 상태 업데이트 함수 타입
+  originThumbnailImageURL: string;
 }
 
 function ThumbnailModal({
@@ -35,6 +36,7 @@ function ThumbnailModal({
   handleSubmit,
   setThumbnailImage,
   thumbnailImage,
+  originThumbnailImageURL,
 }: ThumbnailModalType) {
   const [slideOver, setSlideOver] = useState(false);
   const [slideOut, setSlideOut] = useState(false);
@@ -51,6 +53,13 @@ function ThumbnailModal({
     if (!slideOut) return;
     setTimeout(() => {
       onClose();
+      if (thumbnailImage.url !== originThumbnailImageURL) {
+        console.log('1');
+        setThumbnailImage((prev) => ({
+          ...prev,
+          url: originThumbnailImageURL,
+        }));
+      }
     }, 150);
   }, [slideOut, onClose]);
 
@@ -92,7 +101,7 @@ function ThumbnailModal({
           htmlFor='thumbanilImage'
           className='flex flex-col items-center justify-center text-white text-[20px] w-[320px] h-[200px] bg-gray-200 mx-auto overflow-hidden border'
         >
-          {thumbnailImage.file ? (
+          {thumbnailImage.url ? (
             <>
               <Image
                 width={320}
