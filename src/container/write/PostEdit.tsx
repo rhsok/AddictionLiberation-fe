@@ -49,6 +49,8 @@ function PostEdit({ params }: PostEditProps) {
     file: undefined,
     url: '',
   });
+  const [originThumbnailImageURL, setOriginThumbnailImageURL] =
+    useState<string>('');
 
   const [editPost, setEditPost] = useState<{
     main: string;
@@ -515,10 +517,25 @@ function PostEdit({ params }: PostEditProps) {
         setPost(resData);
         console.log('resData', resData);
         setPostData(resData);
+        setThumbnailImage((prev) => ({
+          ...prev,
+          url: resData.thumbnailImageURL,
+        }));
+        setOriginThumbnailImageURL(resData.thumbnailImageURL);
       } catch (error) {}
     };
     fetchPost();
   }, [params, post]);
+
+  useEffect(() => {
+    if (!post) return;
+    console.log('post.thumbnailImageURL', post.thumbnailImageURL);
+    setThumbnailImage((prev) => ({
+      ...prev,
+      url: post.thumbnailImageURL,
+    }));
+    setOriginThumbnailImageURL(post.thumbnailImageURL);
+  }, [post]);
 
   //title, content, subtitle, category 매핑
   useEffect(() => {
@@ -830,6 +847,7 @@ function PostEdit({ params }: PostEditProps) {
                 openModal={openModal}
                 setThumbnailImage={setThumbnailImage}
                 thumbnailImage={thumbnailImage}
+                originThumbnailImageURL={originThumbnailImageURL}
               />
             </ModalPortal>
           )}

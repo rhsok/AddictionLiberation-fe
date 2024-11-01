@@ -26,3 +26,8 @@ export const getPostById = async (postId: string) => {
   const response = await instance.get(`/posts/${postId}`);
   return response.data;
 };
+
+export const editPostById = async (postId: string) => {
+  const response = await instance.patch(`/post/${postId}`);
+  return response.data;
+};
