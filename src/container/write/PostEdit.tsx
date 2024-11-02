@@ -16,6 +16,7 @@ import VideoTagSVG from '../../../public/Image/write/VideoTagSVG';
 import ThumbnailModal from '@/components/Modal/ThumbnailModal/ThumbnailModal';
 import postStore from '@/states/postStore/postStore';
 import { PostType } from '@/types/postStore/postStore.types';
+import { useRouter } from 'next/navigation';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
 type DropdownKey = 'category' | 'postType' | 'isMain';
@@ -32,6 +33,7 @@ interface PostEditProps {
 }
 
 function PostEdit({ params }: PostEditProps) {
+  const router = useRouter();
   //게시글 정보
   const { setPost, post } = postStore();
   const [postdata, setPostData] = useState<PostType>();
@@ -279,7 +281,6 @@ function PostEdit({ params }: PostEditProps) {
       selection.addRange(range);
     }
   };
-
 
   const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -782,7 +783,14 @@ function PostEdit({ params }: PostEditProps) {
 
         <div className='w-full h-[64px]'></div>
         <div className=' bottom-0 flex justify-between px-[48px] w-full h-[64px] border-t bg-b'>
-          <div className='flex items-center justify-center'>뒤로가기</div>
+          <div
+            onClick={() => {
+              router.push(`/post/${params.postId}`);
+            }}
+            className='flex items-center justify-center cursor-pointer'
+          >
+            뒤로가기
+          </div>
           <div
             onClick={() => {
               // handleSubmit();
@@ -790,7 +798,7 @@ function PostEdit({ params }: PostEditProps) {
             }}
             className='flex items-center justify-center my-2 px-2 cursor-pointer hover:bg-gray-200'
           >
-            게시하기
+            수정하기
           </div>
           {thumbanilModalActive && (
             <ModalPortal>

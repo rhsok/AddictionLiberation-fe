@@ -13,7 +13,7 @@ interface ThumbnailModalType {
   selectedOptions: {
     [key: string]: { label: string; value: number | boolean };
   };
-  editPost: {
+  editPost?: {
     main: string;
     sub: string;
     htmlContent: string;
@@ -23,7 +23,7 @@ interface ThumbnailModalType {
   videoTag: string;
   thumbnailImage: ThumbnailImage; // 위에서 정의한 타입
   setThumbnailImage: React.Dispatch<React.SetStateAction<ThumbnailImage>>; // 상태 업데이트 함수 타입
-  originThumbnailImageURL: string;
+  originThumbnailImageURL?: string;
 }
 
 function ThumbnailModal({
@@ -54,10 +54,9 @@ function ThumbnailModal({
     setTimeout(() => {
       onClose();
       if (thumbnailImage.url !== originThumbnailImageURL) {
-        console.log('1');
         setThumbnailImage((prev) => ({
           ...prev,
-          url: originThumbnailImageURL,
+          url: originThumbnailImageURL || '',
         }));
       }
     }, 150);
