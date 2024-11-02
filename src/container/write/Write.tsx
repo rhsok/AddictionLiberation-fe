@@ -747,7 +747,6 @@ function Write() {
                 handleSubmit={handleSubmit}
                 selectedImage={selectedImage}
                 selectedOptions={selectedOptions}
-                post={post}
                 isOpen={thumbanilModalActive}
                 onClose={closeModal}
                 openModal={openModal}

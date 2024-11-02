@@ -2,7 +2,12 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/components/Modal/ModalPortal';
 import Dropdown from '@/components/Dropdown/Dropdown';
-import { getPostById, uploadImage, writePost } from '@/services/post/post.api';
+import {
+  editPostById,
+  getPostById,
+  uploadImage,
+  writePost,
+} from '@/services/post/post.api';
 import LeftSVG from '../../../public/Image/write/LeftSVG';
 import CenterSVG from '../../../public/Image/write/CenterSVG';
 import RightSVG from '../../../public/Image/write/RightSVG';
@@ -11,6 +16,7 @@ import VideoTagSVG from '../../../public/Image/write/VideoTagSVG';
 import ThumbnailModal from '@/components/Modal/ThumbnailModal/ThumbnailModal';
 import postStore from '@/states/postStore/postStore';
 import { PostType } from '@/types/postStore/postStore.types';
+import { useRouter } from 'next/navigation';
 
 // DropdownKey는 세 가지 키만을 허용하는 타입
 type DropdownKey = 'category' | 'postType' | 'isMain';
@@ -27,6 +33,7 @@ interface PostEditProps {
 }
 
 function PostEdit({ params }: PostEditProps) {
+  const router = useRouter();
   //게시글 정보
   const { setPost, post } = postStore();
   const [postdata, setPostData] = useState<PostType>();
@@ -42,6 +49,7 @@ function PostEdit({ params }: PostEditProps) {
   const [linkURL, setLinkURL] = useState<string>('');
   const [videoTag, setVideoTag] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [isImageModified, setIsImageModified] = useState<boolean>(false);
   const [thumbnailImage, setThumbnailImage] = useState<{
     file: File | undefined;
     url: string;
@@ -50,7 +58,7 @@ function PostEdit({ params }: PostEditProps) {
     url: '',
   });
   const [originThumbnailImageURL, setOriginThumbnailImageURL] =
-    useState<string>('');
+    useState<string>('/');
 
   const [editPost, setEditPost] = useState<{
     main: string;
@@ -274,33 +282,11 @@ function PostEdit({ params }: PostEditProps) {
     }
   };
 
-  // const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => {
-  //       if (editorRef.current) {
-  //         editorRef.current.focus();
-  //         // 이미지를 가운데 정렬된 상태로 삽입
-  //         const imgHTML = `
-  //           <div style="">
-  //             <img src="${e.target?.result}" style="width: 99%; cursor: pointer; float: left;" class="inserted-image">
-  //           </div>`;
-  //         document.execCommand('insertHTML', false, imgHTML);
-  //       }
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  //   if (event.target.files) {
-  //     setSelectedImage(event.target.files[0]);
-  //   }
-  // };
-
   const handleInsertImage = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (file) {
+      setIsImageModified(true);
       const reader = new FileReader();
       reader.onload = (e) => {
         if (editorRef.current) {
@@ -382,103 +368,76 @@ function PostEdit({ params }: PostEditProps) {
   };
 
   const handleSubmit = async () => {
-    //유효성검사
-    validateFunction();
+    validateFunction(); // 유효성 검사
+    let thumbnailUrl = originThumbnailImageURL; // 썸네일 URL 초기값
+    let htmlContent = editorRef.current?.innerHTML || editPost.htmlContent; // contentEditable의 HTML 내용
 
-    //썸네일 이미지 저장후 url 받기
-    let thumbnailUrl;
-    try {
-      if (!thumbnailImage.file) return;
-      const blob = new Blob([thumbnailImage.file], {
-        type: thumbnailImage.file.type,
-      });
-      console.log('썸네일이미지', blob);
-      thumbnailUrl = await uploadImage(blob); // 서버에 이미지 업로드
-    } catch (error) {
-      console.log('썸네일 이미지 등록 실패', error);
-      alert('이미지 등록에 실패했습니다');
-      return;
-    }
+    if (!params.postId) return alert('게시글id를 확인하십시오.');
 
-    if (!editorRef.current) return;
-    let htmlContent = editorRef.current.innerHTML; // contentEditable에서 HTML 가져오기
-
-    // 이미지 업로드 로직
-    const images = []; // 업로드할 이미지 목록
-    const regex = /<img[^>]+src="([^">]+)"/g; // img 태그의 src 속성을 찾기 위한 정규 표현식
-    let match;
-
-    let file;
-    while ((match = regex.exec(htmlContent)) !== null) {
-      const imgSrc = match[1]; // img 태그의 src 값
-
-      if (imgSrc.startsWith('data:image/')) {
-        // data URL인 경우 Blob으로 변환
-        const response = await fetch(imgSrc);
-        const blob = await response.blob();
-        file = new File([blob], 'uploaded_image.png', { type: blob.type });
-      } else {
-        // 일반 URL인 경우, fetch로 파일 가져오기
-        file = await fetch(imgSrc).then((res) => res.blob());
-      }
-
-      // 이미지 업로드
+    // 1. 썸네일 이미지가 변경된 경우
+    if (thumbnailImage.url !== originThumbnailImageURL && thumbnailImage.file) {
       try {
-        const uploadedImageUrl = await uploadImage(file); // 서버에 이미지 업로드
-        console.log('이미지저장완료', uploadedImageUrl);
-        images.push(uploadedImageUrl); // 업로드된 이미지 URL 저장
-        console.log('htmlContent', htmlContent);
-
-        // HTML 내용에서 기존 이미지 src를 업로드된 이미지 URL로 교체
-        htmlContent = htmlContent.replace(imgSrc, uploadedImageUrl.filePath);
-        const reqData = {
-          title: editPost.main,
-          content: htmlContent,
-          subtitle: editPost.sub,
-          videoUrl: videoTag,
-          published: true,
-          postTypeId: selectedOptions.postType.value,
-          publishedDate: new Date(),
-          thumbnailImageURL: thumbnailUrl.filePath,
-          categories: [
-            {
-              categoryId: selectedOptions.category.value,
-              isMain: selectedOptions.isMain.value,
-            },
-          ],
-        };
-        const resData = await writePost(reqData);
-        alert('게시글 작성 완료');
+        const blob = new Blob([thumbnailImage.file], {
+          type: thumbnailImage.file.type,
+        });
+        const uploadedThumbnail = await uploadImage(blob); // 서버에 이미지 업로드
+        thumbnailUrl = uploadedThumbnail.filePath;
       } catch (error) {
-        console.error('게시글 작성 중 오류 발생:', error);
+        console.log('썸네일 이미지 등록 실패:', error);
+        alert('이미지 등록에 실패했습니다.');
+        return;
       }
     }
 
-    try {
-      if (!selectedImage) {
-        const reqData = {
-          title: editPost.main,
-          content: editPost.htmlContent,
-          subtitle: editPost.sub,
-          videoUrl: videoTag,
-          published: true,
-          postTypeId: selectedOptions.postType.value,
-          publishedDate: new Date(),
-          thumbnailImageURL: thumbnailUrl.filePath,
-          categories: [
-            {
-              categoryId: selectedOptions.category.value,
-              isMain: selectedOptions.isMain.value,
-            },
-          ],
-        };
-        console.log('게시글 ', reqData);
-        const resData = await writePost(reqData);
-        console.log('게시글 작성 완료', resData);
-        alert('게시글 작성 완료');
+    // 2. 콘텐츠의 이미지가 변경된 경우
+    if (isImageModified) {
+      const regex = /<img[^>]+src="([^">]+)"/g;
+      let match;
+      while ((match = regex.exec(htmlContent)) !== null) {
+        const imgSrc = match[1]; // img 태그의 src 값
+        let file;
+
+        try {
+          if (imgSrc.startsWith('data:image/')) {
+            const response = await fetch(imgSrc);
+            const blob = await response.blob();
+            file = new File([blob], 'uploaded_image.png', { type: blob.type });
+          } else {
+            file = await fetch(imgSrc).then((res) => res.blob());
+          }
+
+          const uploadedImage = await uploadImage(file); // 서버에 이미지 업로드
+          htmlContent = htmlContent.replace(imgSrc, uploadedImage.filePath); // src 경로 업데이트
+        } catch (error) {
+          console.error('이미지 업로드 중 오류 발생:', error);
+        }
       }
+    }
+
+    // 3. 게시글 데이터 준비 및 전송
+    const reqData = {
+      title: editPost.main,
+      content: htmlContent,
+      subtitle: editPost.sub,
+      videoUrl: videoTag,
+      published: true,
+      postTypeId: selectedOptions.postType.value,
+      publishedDate: new Date(),
+      thumbnailImageURL: thumbnailUrl, // 최종 썸네일 URL
+      categories: [
+        {
+          categoryId: selectedOptions.category.value,
+          isMain: selectedOptions.isMain.value,
+        },
+      ],
+    };
+
+    try {
+      const resData = await editPostById(params.postId, reqData);
+      console.log('게시글 수정 완료:', resData);
+      alert('게시글 수정 완료');
     } catch (error) {
-      console.error('게시글 작성 실패, 서버 요청 오류', error);
+      console.error('게시글 수정 실패, 서버 요청 오류:', error);
     }
   };
 
@@ -824,7 +783,14 @@ function PostEdit({ params }: PostEditProps) {
 
         <div className='w-full h-[64px]'></div>
         <div className=' bottom-0 flex justify-between px-[48px] w-full h-[64px] border-t bg-b'>
-          <div className='flex items-center justify-center'>뒤로가기</div>
+          <div
+            onClick={() => {
+              router.push(`/post/${params.postId}`);
+            }}
+            className='flex items-center justify-center cursor-pointer'
+          >
+            뒤로가기
+          </div>
           <div
             onClick={() => {
               // handleSubmit();
@@ -832,7 +798,7 @@ function PostEdit({ params }: PostEditProps) {
             }}
             className='flex items-center justify-center my-2 px-2 cursor-pointer hover:bg-gray-200'
           >
-            게시하기
+            수정하기
           </div>
           {thumbanilModalActive && (
             <ModalPortal>
