@@ -22,3 +22,21 @@ export interface PostType {
   updateAt: string;
   videoUrl: string;
 }
+
+interface CategoryData {
+  categoryId: number | boolean;
+  isMain: number | boolean;
+}
+
+// 게시글 요청 데이터 타입 정의
+export interface EditPostData {
+  title: string;
+  content: string;
+  subtitle: string;
+  videoUrl: string;
+  published: boolean;
+  postTypeId: number | boolean;
+  publishedDate: Date;
+  thumbnailImageURL: string;
+  categories: CategoryData[];
+}

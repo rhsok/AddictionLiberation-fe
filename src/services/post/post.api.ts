@@ -1,3 +1,4 @@
+import { EditPostData } from '@/types/postStore/postStore.types';
 import instance from '../instance/axiosInstance';
 
 export const writePost = async (data: any): Promise<any> => {
@@ -27,7 +28,7 @@ export const getPostById = async (postId: string) => {
   return response.data;
 };
 
-export const editPostById = async (postId: string) => {
-  const response = await instance.patch(`/post/${postId}`);
+export const editPostById = async (postId: string, data: EditPostData) => {
+  const response = await instance.patch(`/posts/${postId}`, data);
   return response.data;
 };
