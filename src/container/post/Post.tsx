@@ -1,14 +1,17 @@
 'use client';
-import { getPostById } from '@/services/post/post.api';
+import { getPostById, softDelteById } from '@/services/post/post.api';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import postStore from '@/states/postStore/postStore';
+import ModalPortal from '@/components/Modal/ModalPortal';
+import ConfirmModal from '@/components/Modal/ConfirmModal/ConfirmModal';
 
 interface PostProps {
   params: { postId: string };
 }
 
 const Post = ({ params }: PostProps) => {
+  const [isModalActive, setIsModalActive] = useState<boolean>(false);
   const [postdata, setPostData] = useState<any>();
   const router = useRouter();
   const { setPost, post } = postStore();
@@ -29,6 +32,17 @@ const Post = ({ params }: PostProps) => {
     console.log('post', post);
   }, [post]);
 
+  const handleDeleteSubmit = async () => {
+    try {
+      const resData = await softDelteById(params.postId);
+      alert('삭제완료');
+      router.push('/main');
+      console.log('resData', resData);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   return (
     <div className='flex justify-center'>
       <div className='relative w-[1580px]  min-h-[1000px]  '>
@@ -43,18 +57,31 @@ const Post = ({ params }: PostProps) => {
             {postdata && postdata.subtitle}
           </p>
         </div>
-        <div className='absolute flex gap-4 top-[150px] right-[190px] '>
+        <div className='absolute flex gap-4 top-[150px] right-[230px] '>
           <button
             onClick={() => {
               router.push(`/postEdit/${params.postId}`);
             }}
-            className='border border-black p-2 px-4 cursor-pointer rounded-lg bg-gray-300 hover:bg-gray-100 focus:bg-gray-200'
+            className='border border-black p-2 px-4 cursor-pointer rounded-lg  hover:bg-gray-100 focus:bg-gray-200'
           >
             수정
           </button>
-          <button className='border border-black p-2 px-4 cursor-pointer rounded-lg hover:bg-gray-100 focus:bg-gray-200'>
+          <button
+            onClick={() => {
+              setIsModalActive(true);
+            }}
+            className='border border-black p-2 px-4 cursor-pointer rounded-lg hover:bg-gray-100 focus:bg-gray-200'
+          >
             삭제
           </button>
+          {isModalActive && (
+            <ModalPortal>
+              <ConfirmModal
+                submitFunction={handleDeleteSubmit}
+                setIsModalActive={setIsModalActive}
+              />
+            </ModalPortal>
+          )}
         </div>
         <div className='w-full flex flex-row justify-center py-10 gap-5'>
           <div
