@@ -32,3 +32,8 @@ export const editPostById = async (postId: string, data: EditPostData) => {
   const response = await instance.patch(`/posts/${postId}`, data);
   return response.data;
 };
+
+export const softDelteById = async (postId: string) => {
+  const response = await instance.delete(`/posts/${postId}`);
+  return response.data;
+};
