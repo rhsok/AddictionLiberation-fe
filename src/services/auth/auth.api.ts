@@ -15,3 +15,8 @@ export const loginUser = async (data: any) => {
   });
   return response.data;
 };
+
+export const logoutUser = async () => {
+  const response = await axios.patch(``);
+  return response.data;
+};
