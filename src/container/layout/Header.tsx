@@ -1,10 +1,12 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { parseCookies } from 'nookies';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(256); // 초기 헤더 높이 설정
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   const handleScroll = () => {
     if (window.scrollY > 150) {
@@ -27,19 +29,48 @@ function Header() {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    const token = parseCookies();
+    console.log('token', token.jwt);
+    if (!token) return;
+    setIsAdmin(true);
+  }, []);
+
   return (
     <div
       style={{ height: `${headerHeight}px`, transition: 'height 0.15s ease' }}
       className={`fixed flex flex-col items-center w-full   bg-[#32B67A]  z-10 transform transition-transform duration-300 `}
     >
-      <div
-        onClick={() => {
-          router.push('/auth/login');
-        }}
-        className='absolute top-3 right-10 text-white cursor-pointer'
-      >
-        login
-      </div>
+      {isAdmin ? (
+        <>
+          <div
+            onClick={() => {
+              router.push('/auth/login');
+            }}
+            className='absolute top-3 right-10 text-white cursor-pointer'
+          >
+            logout
+          </div>
+          <div
+            onClick={() => {
+              router.push('/write');
+            }}
+            className='absolute top-3 right-28 text-white cursor-pointer'
+          >
+            write
+          </div>
+        </>
+      ) : (
+        <div
+          onClick={() => {
+            router.push('/auth/login');
+          }}
+          className='absolute top-3 right-10 text-white cursor-pointer'
+        >
+          login
+        </div>
+      )}
+
       {headerHeight === 256 ? (
         <>
           <div
