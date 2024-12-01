@@ -192,7 +192,7 @@ function PostEdit({ params }: PostEditProps) {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       lastRangeRef.current = selection.getRangeAt(0);
-      console.log('Current Range:', lastRangeRef.current);
+      // console.log('Current Range:', lastRangeRef.current);
     }
     //게시글 내용
     if (editorRef.current) {
@@ -202,7 +202,7 @@ function PostEdit({ params }: PostEditProps) {
           htmlContent: editorRef.current!.innerHTML,
         };
       });
-      console.log(editorRef.current.innerHTML);
+      // console.log(editorRef.current.innerHTML);
     }
   };
 
@@ -244,7 +244,7 @@ function PostEdit({ params }: PostEditProps) {
   };
 
   const insertIframe = () => {
-    console.log(videoTag);
+    // console.log(videoTag);
     if (editorRef.current) {
       editorRef.current.focus();
       const iframeHTML = `${videoTag}`;
@@ -383,7 +383,7 @@ function PostEdit({ params }: PostEditProps) {
         const uploadedThumbnail = await uploadImage(blob); // 서버에 이미지 업로드
         thumbnailUrl = uploadedThumbnail.filePath;
       } catch (error) {
-        console.log('썸네일 이미지 등록 실패:', error);
+        // console.log('썸네일 이미지 등록 실패:', error);
         alert('이미지 등록에 실패했습니다.');
         return;
       }
@@ -434,7 +434,7 @@ function PostEdit({ params }: PostEditProps) {
 
     try {
       const resData = await editPostById(params.postId, reqData);
-      console.log('게시글 수정 완료:', resData);
+      // console.log('게시글 수정 완료:', resData);
       alert('게시글 수정 완료');
     } catch (error) {
       console.error('게시글 수정 실패, 서버 요청 오류:', error);
@@ -468,13 +468,12 @@ function PostEdit({ params }: PostEditProps) {
   //게시글 정보 불러오기
   useEffect(() => {
     //post에서 전역변수로 데이터를 저장해서 불러 올 수 없으면 데이터를 요청한다.
-    console.log('post', post);
+    // console.log('post', post);
     if (post) return;
     const fetchPost = async () => {
       try {
         const resData = await getPostById(params.postId);
         setPost(resData);
-        console.log('resData', resData);
         setPostData(resData);
         setThumbnailImage((prev) => ({
           ...prev,
@@ -488,7 +487,7 @@ function PostEdit({ params }: PostEditProps) {
 
   useEffect(() => {
     if (!post) return;
-    console.log('post.thumbnailImageURL', post.thumbnailImageURL);
+    // console.log('post.thumbnailImageURL', post.thumbnailImageURL);
     setThumbnailImage((prev) => ({
       ...prev,
       url: post.thumbnailImageURL,

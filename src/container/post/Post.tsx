@@ -20,7 +20,7 @@ const Post = ({ params }: PostProps) => {
     const fetchPost = async () => {
       try {
         const resData = await getPostById(params.postId);
-        console.log('res', resData);
+        // console.log('res', resData);
         setPostData(resData);
         setPost(resData);
       } catch (error) {}
@@ -29,7 +29,7 @@ const Post = ({ params }: PostProps) => {
   }, [params]);
 
   useEffect(() => {
-    console.log('post', post);
+    // console.log('post', post);
   }, [post]);
 
   const handleDeleteSubmit = async () => {
@@ -37,7 +37,7 @@ const Post = ({ params }: PostProps) => {
       const resData = await softDelteById(params.postId);
       alert('삭제완료');
       router.push('/main');
-      console.log('resData', resData);
+      // console.log('resData', resData);
     } catch (error) {
       console.log('error', error);
     }
