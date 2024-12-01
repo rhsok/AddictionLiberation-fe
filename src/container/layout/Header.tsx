@@ -31,8 +31,8 @@ function Header() {
 
   useEffect(() => {
     const token = parseCookies();
-    console.log('token', token.jwt);
-    if (!token) return;
+    // console.log('token', token.jwt);
+    if (!token.jwt) return;
     setIsAdmin(true);
   }, []);
 

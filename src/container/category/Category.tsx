@@ -47,7 +47,7 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
       try {
         if (!id) return;
         const resData = await getCategory(id);
-        console.log('resData', resData);
+        // console.log('resData', resData);
         setSelectedCategoryData(resData);
       } catch (error) {}
     };

@@ -10,7 +10,6 @@ function MainPage() {
     const fetchData = async () => {
       try {
         const resData = await getMainPost();
-        console.log('res', resData);
         const newData = {
           youtube: resData?.[1],
           alcoholism: resData?.[2],
@@ -25,7 +24,7 @@ function MainPage() {
   }, []);
 
   useEffect(() => {
-    console.log('data', data);
+    // console.log('data', data);
   }, [data]);
 
   return (

@@ -172,7 +172,7 @@ function Write() {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       lastRangeRef.current = selection.getRangeAt(0);
-      console.log('Current Range:', lastRangeRef.current);
+      // console.log('Current Range:', lastRangeRef.current);
     }
     //게시글 내용
     if (editorRef.current) {
@@ -182,7 +182,7 @@ function Write() {
           htmlContent: editorRef.current!.innerHTML,
         };
       });
-      console.log(editorRef.current.innerHTML);
+      // console.log(editorRef.current.innerHTML);
     }
   };
 
@@ -224,7 +224,7 @@ function Write() {
   };
 
   const insertIframe = () => {
-    console.log(videoTag);
+    // console.log(videoTag);
     if (editorRef.current) {
       editorRef.current.focus();
       const iframeHTML = `${videoTag}`;
@@ -380,10 +380,10 @@ function Write() {
       const blob = new Blob([thumbnailImage.file], {
         type: thumbnailImage.file.type,
       });
-      console.log('썸네일이미지', blob);
+      // console.log('썸네일이미지', blob);
       thumbnailUrl = await uploadImage(blob); // 서버에 이미지 업로드
     } catch (error) {
-      console.log('썸네일 이미지 등록 실패', error);
+      // console.log('썸네일 이미지 등록 실패', error);
       alert('이미지 등록에 실패했습니다');
       return;
     }
@@ -413,9 +413,9 @@ function Write() {
       // 이미지 업로드
       try {
         const uploadedImageUrl = await uploadImage(file); // 서버에 이미지 업로드
-        console.log('이미지저장완료', uploadedImageUrl);
+        // console.log('이미지저장완료', uploadedImageUrl);
         images.push(uploadedImageUrl); // 업로드된 이미지 URL 저장
-        console.log('htmlContent', htmlContent);
+        // console.log('htmlContent', htmlContent);
 
         // HTML 내용에서 기존 이미지 src를 업로드된 이미지 URL로 교체
         htmlContent = htmlContent.replace(imgSrc, uploadedImageUrl.filePath);
@@ -460,9 +460,9 @@ function Write() {
             },
           ],
         };
-        console.log('게시글 ', reqData);
+        // console.log('게시글 ', reqData);
         const resData = await writePost(reqData);
-        console.log('게시글 작성 완료', resData);
+        // console.log('게시글 작성 완료', resData);
         alert('게시글 작성 완료');
       }
     } catch (error) {
@@ -491,7 +491,7 @@ function Write() {
   };
 
   useEffect(() => {
-    console.log('lastRangeRef', lastRangeRef);
+    // console.log('lastRangeRef', lastRangeRef);
   }, [lastRangeRef]);
 
   return (
