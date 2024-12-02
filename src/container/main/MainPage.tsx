@@ -33,8 +33,7 @@ function MainPage() {
     console.log('data', data);
   }, [data]);
 
-  if (data.main[0].length === 0)
-    return <div> 데이터를 불러올 수 없습니다.</div>;
+  if (data.main.length === 0) return <div> 데이터를 불러올 수 없습니다.</div>;
 
   return (
     <div>
