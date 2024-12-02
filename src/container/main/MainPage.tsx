@@ -24,7 +24,7 @@ function MainPage() {
   }, []);
 
   useEffect(() => {
-    // console.log('data', data);
+    console.log('data', data);
   }, [data]);
 
   return (
@@ -207,7 +207,7 @@ function MainPage() {
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200 cursor-pointer'>
                         <img
-                          src={item.thumbnailImageURL}
+                          src={item.thumbnailImageURL || ''}
                           alt=''
                           className='w-full h-full cursor-pointer'
                         />
