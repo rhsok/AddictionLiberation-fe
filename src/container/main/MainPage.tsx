@@ -27,6 +27,8 @@ function MainPage() {
     console.log('data', data);
   }, [data]);
 
+  if (!data) return <div> 데이터를 불러올 수 없습니다.</div>;
+
   return (
     <div>
       <div className='w-full h-[256px]'></div>
