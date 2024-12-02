@@ -4,12 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 function MainPage() {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<any>({
+    youtube: [],
+    alcoholism: [],
+    game: [],
+    main: [],
+  });
   const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const resData = await getMainPost();
+        console.log(resData, resData);
         const newData = {
           youtube: resData?.[1],
           alcoholism: resData?.[2],
@@ -27,7 +33,8 @@ function MainPage() {
     console.log('data', data);
   }, [data]);
 
-  if (!data) return <div> 데이터를 불러올 수 없습니다.</div>;
+  if (data.main[0].length === 0)
+    return <div> 데이터를 불러올 수 없습니다.</div>;
 
   return (
     <div>
