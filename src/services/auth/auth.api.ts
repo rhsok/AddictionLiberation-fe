@@ -5,7 +5,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_BASEURL;
 export const signupUser = async (data: any) => {
   const response = await axios.post(`${baseURL}/users/register`, data, {
     headers: {
-      'Origin': 'https://addictionliberation.kr',
+      'Origin': 'https://www.addictionliberation.kr/',
       'Content-Type': 'application/json',
     },
   });
