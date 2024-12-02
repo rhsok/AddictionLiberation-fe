@@ -24,7 +24,7 @@ function MainPage() {
   }, []);
 
   useEffect(() => {
-    // console.log('data', data);
+    console.log('data', data);
   }, [data]);
 
   return (
@@ -47,7 +47,7 @@ function MainPage() {
                 onClick={() => {
                   router.push(`/post/${data?.main[0].id}`);
                 }}
-                src={data?.main[0].thumbnailImageURL}
+                src={data?.main[0].thumbnailImageURL || ''}
                 alt=''
                 className='w-full h-full rounded-lg cursor-pointer'
               />
@@ -80,7 +80,7 @@ function MainPage() {
                 <div className='w-full'>
                   <div className='h-[202px] '>
                     <img
-                      src={item.thumbnailImageURL}
+                      src={item.thumbnailImageURL || ''}
                       alt=''
                       className='w-full h-full cursor-pointer'
                     />
@@ -168,7 +168,7 @@ function MainPage() {
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200'>
                         <img
-                          src={item.thumbnailImageURL}
+                          src={item.thumbnailImageURL || ''}
                           alt=''
                           className='w-full h-full cursor-pointer'
                         />
@@ -207,7 +207,7 @@ function MainPage() {
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200 cursor-pointer'>
                         <img
-                          src={item.thumbnailImageURL}
+                          src={item.thumbnailImageURL || ''}
                           alt=''
                           className='w-full h-full cursor-pointer'
                         />
@@ -246,7 +246,7 @@ function MainPage() {
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200'>
                         <img
-                          src={item.thumbnailImageURL}
+                          src={item.thumbnailImageURL || ''}
                           alt=''
                           className='w-full h-full cursor-pointer'
                         />
