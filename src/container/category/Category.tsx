@@ -74,7 +74,7 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
                 onClick={() => {
                   router.push(`/post/${selectedCategoryData?.main[0].id}`);
                 }}
-                className='w-full h-[583px] border '
+                className='w-[540px] h-[337px] border '
               >
                 <img
                   src={selectedCategoryData?.main[0].thumbanilImageURL}
@@ -86,11 +86,11 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
                 onClick={() => {
                   router.push(`/post/${selectedCategoryData?.main[0].id}`);
                 }}
-                className='mt-[38px] text-[40px] font-bold line-clamp-2 cursor-pointer '
+                className='mt-[38px] text-[30px] font-bold line-clamp-2 cursor-pointer '
               >
                 {selectedCategoryData?.main[0].title}
               </div>
-              <div className='flex flex-row mt-[49px] gap-[53px] '>
+              <div className='grid grid-cols-3 mt-[49px] gap-[53px] '>
                 {selectedCategoryData?.main.slice(1).map((item: any) => (
                   <div className='w-[310px]' key={item.id}>
                     <div

@@ -31,8 +31,8 @@ function Header() {
 
   useEffect(() => {
     const token = parseCookies();
-    // console.log('token', token.jwt);
-    if (!token.jwt) return;
+    //console.log('token', token.isLogin);
+    if (token.isLogin !== 'active') return;
     setIsAdmin(true);
   }, []);
 
@@ -44,9 +44,7 @@ function Header() {
       {isAdmin ? (
         <>
           <div
-            onClick={() => {
-              router.push('/auth/login');
-            }}
+            onClick={() => {}}
             className='absolute top-3 right-10 text-white cursor-pointer'
           >
             logout

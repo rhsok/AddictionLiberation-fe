@@ -104,7 +104,7 @@ function MainPage() {
             ))}
           </div>
         </div>
-        <div className='flex w-[360px]  p-1'>
+        {/* <div className='flex w-[360px]  p-1'>
           <div className='w-full  border border-black'>
             <div className='flex justify-center mt-[38px] text-[27px]'>
               <p>Recconmend</p>
@@ -148,7 +148,7 @@ function MainPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className='flex justify-center w-full h-full bg-white '>
