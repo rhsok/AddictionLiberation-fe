@@ -28,6 +28,7 @@ function Login() {
       const resData = await loginUser(data);
       setAccessToken(resData.token);
       const decodedJWT = decodeJWT(resData.accessToken);
+      console.log('de', decodedJWT);
       setUser({
         id: decodedJWT.id,
         email: decodedJWT.email,
@@ -36,11 +37,12 @@ function Login() {
         iat: decodedJWT.iat,
         exp: decodedJWT.exp,
       });
-      setCookie(null, 'jwt', resData.refreshToken, {
-        maxAge: 24 * 60 * 60,
+      setCookie(null, 'isLogin', 'active', {
+        maxAge: 14 * 24 * 60 * 60,
         path: '/',
       });
       alert('로그인 완료');
+      router.push('/');
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.data === 'Invaild credentials.')

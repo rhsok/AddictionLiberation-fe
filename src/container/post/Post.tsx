@@ -43,6 +43,17 @@ const Post = ({ params }: PostProps) => {
     }
   };
 
+  const formatDateTime = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit', // 월을 숫자로 표시
+      day: '2-digit', // 일자를 두 자리로 표시
+      hour: '2-digit', // 시간을 두 자리로 표시
+      minute: '2-digit', // 분을 두 자리로 표시
+    });
+  };
+
   return (
     <div className='flex justify-center'>
       <div className='relative w-[1580px]  min-h-[1000px]  '>
@@ -51,7 +62,7 @@ const Post = ({ params }: PostProps) => {
             {postdata && postdata.title}
           </p>
           <p className='w-[840px] text-[10px] text-center line-clamp-2 '>
-            {postdata && postdata.publishedDate}
+            {postdata && formatDateTime(postdata.publishedDate)}
           </p>
           <p className='w-[840px] text-[20px] text-center text-gray-500 '>
             {postdata && postdata.subtitle}
