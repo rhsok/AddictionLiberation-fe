@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('jwt');
+  console.log('middlewarer', token);
 
   if (request.nextUrl.pathname === '/write' && !token) {
     return NextResponse.redirect(new URL('/', request.url));
