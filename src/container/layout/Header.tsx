@@ -1,7 +1,8 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { parseCookies } from 'nookies';
+import { destroyCookie, parseCookies } from 'nookies';
+import { logoutUser } from '@/services/auth/auth.api';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +45,12 @@ function Header() {
       {isAdmin ? (
         <>
           <div
-            onClick={() => {}}
+            onClick={async () => {
+              await logoutUser();
+              destroyCookie(null, 'isLogin', {
+                path: '/',
+              });
+            }}
             className='absolute top-3 right-10 text-white cursor-pointer'
           >
             logout
