@@ -65,7 +65,13 @@ const refreshTokenAndRetry = async (
     /**엑세스 토큰기간 만료 or 없어짐 => 리프래시 토큰으로 엑세스 토큰요청
      * route handler (app/api/refreshToken)
      */
-    const { data } = await axios.post('/api/refreshToken');
+    const { data } = await axios.post(
+      '/api/refreshToken',
+      {},
+      {
+        withCredentials: true, // 쿠키를 포함
+      }
+    );
     setAccessToken(data.token);
     const decodedJWT = decodeJWT(data.token);
     setUser({
