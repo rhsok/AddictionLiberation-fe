@@ -16,6 +16,6 @@ export const loginUser = async (data: any) => {
 };
 
 export const logoutUser = async () => {
-  const response = await axios.patch(`${baseURL}/users/login`);
+  const response = await axios.patch(`${baseURL}/users/logout`);
   return response.data;
 };
