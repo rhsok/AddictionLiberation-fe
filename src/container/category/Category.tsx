@@ -14,13 +14,13 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
 
   const switchTitleToId = (id: string) => {
     switch (id) {
-      case 'youtube':
+      case 'aboutAddiction':
         return '1';
       case 'alcholism':
         return '2';
       case 'game':
         return '3';
-      case 'aboutAddiction':
+      case 'youtube':
         return '4';
     }
   };
