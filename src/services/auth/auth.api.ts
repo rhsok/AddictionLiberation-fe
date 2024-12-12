@@ -16,6 +16,12 @@ export const loginUser = async (data: any) => {
 };
 
 export const logoutUser = async () => {
-  const response = await axios.post(`${baseURL}/users/logout`);
+  const response = await axios.post(
+    `${baseURL}/users/logout`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
   return response.data;
 };
