@@ -19,6 +19,7 @@ const MAX_RETRY_COUNT = 3;
 instance.interceptors.request.use(
   (config) => {
     const token = userStore.getState().accessToken;
+    console.log('엑세스토큰 확인', token);
     config.headers.Authorization = token ? `Bearer ${token}` : '';
     const reqId = '1';
     config.headers['X-Request-ID'] = reqId;
