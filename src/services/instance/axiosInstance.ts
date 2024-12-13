@@ -69,7 +69,7 @@ const refreshTokenAndRetry = async (
      * route handler (app/api/refreshToken)
      */
     const { data } = await axios.post(
-      `${baseURL}/users/refresh_token'`,
+      `${baseURL}/users/refresh_token`,
       {},
       {
         withCredentials: true, // 쿠키를 포함
