@@ -2,6 +2,7 @@
 import { getMainPost } from '@/services/post/post.api';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import userStore from '@/states/userStore/userStore';
 
 function MainPage() {
   const [data, setData] = useState<any>({
@@ -11,6 +12,8 @@ function MainPage() {
     main: [],
   });
   const router = useRouter();
+  const { user } = userStore();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,6 +35,10 @@ function MainPage() {
   useEffect(() => {
     console.log('data', data);
   }, [data]);
+
+  useEffect(() => {
+    console.log('user2', user);
+  }, [user]);
 
   if (data.main.length === 0) return <div> 데이터를 불러올 수 없습니다.</div>;
 
