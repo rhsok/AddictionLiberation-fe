@@ -34,7 +34,7 @@ function Login() {
         id: decodedJWT.id,
         email: decodedJWT.email,
         name: decodedJWT.name,
-        role: decodedJWT.scope,
+        role: decodedJWT.role,
         iat: decodedJWT.iat,
         exp: decodedJWT.exp,
       });
