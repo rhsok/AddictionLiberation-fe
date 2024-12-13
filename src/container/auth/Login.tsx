@@ -29,6 +29,7 @@ function Login() {
       setAccessToken(resData.token);
       const decodedJWT = decodeJWT(resData.accessToken);
       console.log('de', decodedJWT);
+      console.log('at', resData.token);
       setUser({
         id: decodedJWT.id,
         email: decodedJWT.email,
@@ -42,7 +43,7 @@ function Login() {
         path: '/',
       });
       alert('로그인 완료');
-      router.push('/');
+      // router.push('/');
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.data === 'Invaild credentials.')
