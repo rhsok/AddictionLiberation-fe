@@ -81,7 +81,7 @@ const refreshTokenAndRetry = async (
       name: decodedJWT.name,
       iat: decodedJWT.iat,
       exp: decodedJWT.exp,
-      scope: decodedJWT.scope,
+      role  : decodedJWT.scope,
     });
     /** 엑세스토큰 갱신시 기존의 실패했던 요청을 다시 보냄
      */

@@ -11,5 +11,5 @@ export interface UserType {
   name: string;
   iat: number;
   exp: number;
-  scope: string;
+  role: string;
 }
