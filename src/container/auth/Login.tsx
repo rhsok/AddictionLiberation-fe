@@ -33,7 +33,7 @@ function Login() {
         id: decodedJWT.id,
         email: decodedJWT.email,
         name: decodedJWT.name,
-        scope: decodedJWT.scope,
+        role: decodedJWT.scope,
         iat: decodedJWT.iat,
         exp: decodedJWT.exp,
       });
@@ -54,7 +54,7 @@ function Login() {
   };
 
   useEffect(() => {
-    // console.log('user', user);
+    console.log('user1', user);
   }, [user]);
 
   return (
