@@ -4,6 +4,8 @@ import { UserType } from '@/types/userStore/userStore.types';
 import { decodeJWT } from '@/utils/decodeJWT';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
+const baseURL = process.env.NEXT_PUBLIC_API_BASEURL;
+
 const instance = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
@@ -67,7 +69,7 @@ const refreshTokenAndRetry = async (
      * route handler (app/api/refreshToken)
      */
     const { data } = await axios.post(
-      '/api/refreshToken',
+      `${baseURL}/users/refresh_token'`,
       {},
       {
         withCredentials: true, // 쿠키를 포함
@@ -81,7 +83,7 @@ const refreshTokenAndRetry = async (
       name: decodedJWT.name,
       iat: decodedJWT.iat,
       exp: decodedJWT.exp,
-      role  : decodedJWT.scope,
+      role: decodedJWT.scope,
     });
     /** 엑세스토큰 갱신시 기존의 실패했던 요청을 다시 보냄
      */
