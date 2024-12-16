@@ -26,10 +26,8 @@ function Login() {
   const onSubmit = async (data: loginSchemaType) => {
     try {
       const resData = await loginUser(data);
-      setAccessToken(resData.token);
+      setAccessToken(resData.accessToken);
       const decodedJWT = decodeJWT(resData.accessToken);
-      console.log('de', decodedJWT);
-      console.log('at', resData.token);
       setUser({
         id: decodedJWT.id,
         email: decodedJWT.email,
@@ -48,7 +46,6 @@ function Login() {
       if (error instanceof AxiosError) {
         if (error.response?.data === 'Invaild credentials.')
           return alert('비밀번호가 일치하지 않습니다.');
-        console.log('error', error);
         alert('잘못된 요청입니다.');
       }
     }
