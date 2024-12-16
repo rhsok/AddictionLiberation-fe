@@ -20,10 +20,10 @@ function MainPage() {
         const resData = await getMainPost();
         console.log(resData, resData);
         const newData = {
-          youtube: resData?.[1],
+          main: resData?.[1],
           alcoholism: resData?.[2],
           game: resData?.[3],
-          main: resData?.[4],
+          youtube: resData?.[4],
         };
         setData(newData);
       } catch (error) {}
@@ -40,7 +40,12 @@ function MainPage() {
     console.log('user2', user);
   }, [user]);
 
-  if (data.main.length === 0) return <div> 데이터를 불러올 수 없습니다.</div>;
+  if (data.main.length === 0)
+    return (
+      <div className='inset-0 flex items-center justify-center'>
+        <div> 데이터를 불러올 수 없습니다.</div>
+      </div>
+    );
 
   return (
     <div>

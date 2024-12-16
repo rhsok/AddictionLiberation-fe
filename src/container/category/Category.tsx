@@ -70,28 +70,32 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
           <div className='w-full h-[2px] border border-[#D9D9D9]'></div>
           <div className='flex'>
             <div className='shrink-0 w-[1045px] pt-[29px]'>
-              <div
-                onClick={() => {
-                  router.push(`/post/${selectedCategoryData?.main[0].id}`);
-                }}
-                className='w-[540px] h-[337px] border '
-              >
-                <img
-                  src={selectedCategoryData?.main[0].thumbanilImageURL}
-                  alt=''
-                  className='w-full h-full cursor-pointer'
-                />
-              </div>
-              <div
-                onClick={() => {
-                  router.push(`/post/${selectedCategoryData?.main[0].id}`);
-                }}
-                className='mt-[38px] text-[30px] font-bold line-clamp-2 cursor-pointer '
-              >
-                {selectedCategoryData?.main[0].title}
-              </div>
+              {selectedCategoryData?.main?.[0] && (
+                <>
+                  <div
+                    onClick={() => {
+                      router.push(`/post/${selectedCategoryData.main[0].id}`);
+                    }}
+                    className='w-[540px] h-[337px] border '
+                  >
+                    <img
+                      src={selectedCategoryData.main[0].thumbanilImageURL}
+                      alt=''
+                      className='w-full h-full cursor-pointer'
+                    />
+                  </div>
+                  <div
+                    onClick={() => {
+                      router.push(`/post/${selectedCategoryData.main[0].id}`);
+                    }}
+                    className='mt-[38px] text-[30px] font-bold line-clamp-2 cursor-pointer '
+                  >
+                    {selectedCategoryData.main[0].title}
+                  </div>
+                </>
+              )}
               <div className='grid grid-cols-3 mt-[49px] gap-[53px] '>
-                {selectedCategoryData?.main.slice(1).map((item: any) => (
+                {selectedCategoryData?.main?.slice(1).map((item: any) => (
                   <div className='w-[310px]' key={item.id}>
                     <div
                       onClick={() => {
@@ -107,9 +111,6 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
                     >
                       {item.title}
                     </div>
-                    {/* <div className='mt-5 text-[17px] line-clamp-2'>
-                      {item.subtitle}
-                    </div> */}
                   </div>
                 ))}
               </div>
@@ -123,7 +124,7 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         </div>
         <div className='w-full my-5 h-[2px] border border-[#D9D9D9]' />
         <div className='w-[1045px] mt-[69px] pb-10 flex flex-col gap-[46px]'>
-          {selectedCategoryData?.normal.map((item: any) => (
+          {selectedCategoryData?.normal?.map((item: any) => (
             <div
               onClick={() => {
                 router.push(`/post/${item.id}`);
