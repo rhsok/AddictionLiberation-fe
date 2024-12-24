@@ -79,7 +79,7 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
                     className='w-[540px] h-[337px] border '
                   >
                     <img
-                      src={selectedCategoryData.main[0].thumbanilImageURL}
+                      src={selectedCategoryData.main[0].thumbnailImageURL}
                       alt=''
                       className='w-full h-full cursor-pointer'
                     />
@@ -102,7 +102,13 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
                         router.push(`/post/${item.id}`);
                       }}
                       className=' h-[190px] border'
-                    ></div>
+                    >
+                      <img
+                        src={item.thumbnailImageURL || ''}
+                        alt=''
+                        className='w-full h-full cursor-pointer'
+                      />
+                    </div>
                     <div
                       onClick={() => {
                         router.push(`/post/${item.id}`);
@@ -132,7 +138,13 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
               key={item.id}
               className='flex flex-row '
             >
-              <div className='w-[328px] h-[190px] border bg-gray-200 shrink-0 '></div>
+              <div className='w-[328px] h-[190px] border bg-gray-200 shrink-0 '>
+                <img
+                  src={item.thumbnailImageURL || ''}
+                  alt=''
+                  className='w-full h-full cursor-pointer'
+                />
+              </div>
               <div className='ml-[46px] flex flex-col'>
                 <div className='text-[25px] font-bold'>{item.title}</div>
                 <div className='mt-[40px] text-[17px]'>{item.subtitle}</div>

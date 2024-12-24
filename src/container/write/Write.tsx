@@ -78,6 +78,9 @@ function Write() {
       { label: 'Youtube', value: 2 },
       { label: 'Game', value: 3 },
       { label: 'Alcoholism', value: 4 },
+      { label: 'Gambling', value: 5 },
+      { label: 'Drug', value: 6 },
+      { label: 'porn', value: 7 },
     ],
     postType: [
       { label: 'Main', value: 1 },
