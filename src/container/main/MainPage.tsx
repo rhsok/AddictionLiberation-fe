@@ -21,9 +21,12 @@ function MainPage() {
         console.log(resData, resData);
         const newData = {
           main: resData?.[1],
-          alcoholism: resData?.[2],
+          youtube: resData?.[2],
           game: resData?.[3],
-          youtube: resData?.[4],
+          alcoholism: resData?.[4],
+          gambling: resData?.[5],
+          drug: resData?.[6],
+          porn: resData?.[7]
         };
         setData(newData);
       } catch (error) {}
