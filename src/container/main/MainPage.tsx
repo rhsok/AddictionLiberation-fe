@@ -268,41 +268,6 @@ function MainPage() {
           <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
             <div
               onClick={() => {
-                router.push(`/categories/game`);
-              }}
-              className='text-[25px] cursor-pointer'
-            >
-              Game
-            </div>
-            <div className='flex gap-[49px] w-full mt-[14px] '>
-              {data &&
-                data.game.map((item: any) => (
-                  <div
-                    onClick={() => {
-                      router.push(`/post/${item.id}`);
-                    }}
-                    key={item.id}
-                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
-                  >
-                    <div className='w-[360px] '>
-                      <div className='h-[202px] bg-gray-200'>
-                        <img
-                          src={item.thumbnailImageURL || ''}
-                          alt=''
-                          className='w-full h-full cursor-pointer'
-                        />
-                      </div>
-                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
-                      <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
-          <div className='w-full h-1 border-black border-2'></div>
-          <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
-            <div
-              onClick={() => {
                 router.push(`/categories/alcoholism`);
               }}
               className='text-[25px] cursor-pointer'
