@@ -6,10 +6,13 @@ import userStore from '@/states/userStore/userStore';
 
 function MainPage() {
   const [data, setData] = useState<any>({
-    youtube: [],
-    alcoholism: [],
-    game: [],
     main: [],
+    youtube: [],
+    game: [],
+    alcoholism: [],
+    gambling: [],
+    drug: [],
+    porn: [],
   });
   const router = useRouter();
   const { user } = userStore();
@@ -26,7 +29,7 @@ function MainPage() {
           alcoholism: resData?.[4],
           gambling: resData?.[5],
           drug: resData?.[6],
-          porn: resData?.[7]
+          porn: resData?.[7],
         };
         setData(newData);
       } catch (error) {}
@@ -101,17 +104,32 @@ function MainPage() {
                 className='w-[410px] h-[337px] px-[24px] pt-[16px] border'
               >
                 <div className='w-full'>
-                  <div className='h-[202px] '>
+                  <div
+                    className='h-[202px] '
+                    onClick={() => {
+                      router.push(`item.id}`);
+                    }}
+                  >
                     <img
                       src={item.thumbnailImageURL || ''}
                       alt=''
                       className='w-full h-full cursor-pointer'
                     />
                   </div>
-                  <p className=' mt-3 line-clamp-2 text-[20px]  cursor-pointer	'>
+                  <p
+                    onClick={() => {
+                      router.push(`item.id}`);
+                    }}
+                    className=' mt-3 line-clamp-2 text-[20px]  cursor-pointer	'
+                  >
                     {item.title}
                   </p>
-                  <p className='mt-1 line-clamp-2 cursor-pointer'>
+                  <p
+                    onClick={() => {
+                      router.push(`item.id}`);
+                    }}
+                    className='mt-1 line-clamp-2 cursor-pointer'
+                  >
                     {item.subtitle}
                   </p>
                 </div>
@@ -211,15 +229,15 @@ function MainPage() {
           <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
             <div
               onClick={() => {
-                router.push(`/categories/alcholism`);
+                router.push(`/categories/game`);
               }}
               className='text-[25px] cursor-pointer'
             >
-              Alcoholism
+              Game
             </div>
             <div className='flex gap-[49px] w-full mt-[14px] '>
               {data &&
-                data.alcoholism.map((item: any) => (
+                data.game.map((item: any) => (
                   <div
                     onClick={() => {
                       router.push(`/post/${item.id}`);
@@ -259,6 +277,146 @@ function MainPage() {
             <div className='flex gap-[49px] w-full mt-[14px] '>
               {data &&
                 data.game.map((item: any) => (
+                  <div
+                    onClick={() => {
+                      router.push(`/post/${item.id}`);
+                    }}
+                    key={item.id}
+                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                  >
+                    <div className='w-[360px] '>
+                      <div className='h-[202px] bg-gray-200'>
+                        <img
+                          src={item.thumbnailImageURL || ''}
+                          alt=''
+                          className='w-full h-full cursor-pointer'
+                        />
+                      </div>
+                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className='w-full h-1 border-black border-2'></div>
+          <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
+            <div
+              onClick={() => {
+                router.push(`/categories/alcoholism`);
+              }}
+              className='text-[25px] cursor-pointer'
+            >
+              Alcoholism
+            </div>
+            <div className='flex gap-[49px] w-full mt-[14px] '>
+              {data &&
+                data.alcoholism.map((item: any) => (
+                  <div
+                    onClick={() => {
+                      router.push(`/post/${item.id}`);
+                    }}
+                    key={item.id}
+                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                  >
+                    <div className='w-[360px] '>
+                      <div className='h-[202px] bg-gray-200'>
+                        <img
+                          src={item.thumbnailImageURL || ''}
+                          alt=''
+                          className='w-full h-full cursor-pointer'
+                        />
+                      </div>
+                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className='w-full h-1 border-black border-2'></div>
+          <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
+            <div
+              onClick={() => {
+                router.push(`/categories/gambling`);
+              }}
+              className='text-[25px] cursor-pointer'
+            >
+              Gambling
+            </div>
+            <div className='flex gap-[49px] w-full mt-[14px] '>
+              {data &&
+                data.gambling.map((item: any) => (
+                  <div
+                    onClick={() => {
+                      router.push(`/post/${item.id}`);
+                    }}
+                    key={item.id}
+                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                  >
+                    <div className='w-[360px] '>
+                      <div className='h-[202px] bg-gray-200'>
+                        <img
+                          src={item.thumbnailImageURL || ''}
+                          alt=''
+                          className='w-full h-full cursor-pointer'
+                        />
+                      </div>
+                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className='w-full h-1 border-black border-2'></div>
+          <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
+            <div
+              onClick={() => {
+                router.push(`/categories/drug`);
+              }}
+              className='text-[25px] cursor-pointer'
+            >
+              Drug
+            </div>
+            <div className='flex gap-[49px] w-full mt-[14px] '>
+              {data &&
+                data.drug.map((item: any) => (
+                  <div
+                    onClick={() => {
+                      router.push(`/post/${item.id}`);
+                    }}
+                    key={item.id}
+                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                  >
+                    <div className='w-[360px] '>
+                      <div className='h-[202px] bg-gray-200'>
+                        <img
+                          src={item.thumbnailImageURL || ''}
+                          alt=''
+                          className='w-full h-full cursor-pointer'
+                        />
+                      </div>
+                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className='w-full h-1 border-black border-2'></div>
+          <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
+            <div
+              onClick={() => {
+                router.push(`/categories/porn`);
+              }}
+              className='text-[25px] cursor-pointer'
+            >
+              Pron
+            </div>
+            <div className='flex gap-[49px] w-full mt-[14px] '>
+              {data &&
+                data.porn.map((item: any) => (
                   <div
                     onClick={() => {
                       router.push(`/post/${item.id}`);
