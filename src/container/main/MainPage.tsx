@@ -23,13 +23,13 @@ function MainPage() {
         const resData = await getMainPost();
         console.log(resData, resData);
         const newData = {
-          main: resData?.[1],
-          youtube: resData?.[2],
-          game: resData?.[3],
-          alcoholism: resData?.[4],
-          gambling: resData?.[5],
-          drug: resData?.[6],
-          porn: resData?.[7],
+          main: resData?.[1] || [],
+          youtube: resData?.[2] || [],
+          game: resData?.[3] || [],
+          alcoholism: resData?.[4] || [],
+          gambling: resData?.[5] || [],
+          drug: resData?.[6] || [],
+          porn: resData?.[7] || [],
         };
         setData(newData);
       } catch (error) {}
