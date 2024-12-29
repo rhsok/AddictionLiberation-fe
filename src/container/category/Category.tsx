@@ -134,9 +134,9 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
               </div>
             </div>
             <div className='relative w-[565px]  pt-[29px] '>
-              <div className='absolute right-0 flex items-center justify-center w-[378px] h-full border  bg-gray-300  text-[50px] font-bold'>
+              {/* <div className='absolute right-0 flex items-center justify-center w-[378px] h-full border  bg-gray-300  text-[50px] font-bold'>
                 AD
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

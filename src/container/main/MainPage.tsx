@@ -83,7 +83,7 @@ function MainPage() {
                 onClick={() => {
                   router.push(`/post/${data?.main[0].id}`);
                 }}
-                className='w-[760px] text-[30px] line-clamp-2 mt-10 cursor-pointer'
+                className='w-[760px] text-[30px] line-clamp-2 mt-10 cursor-pointer font-bold'
               >
                 {data?.main[0].title}
               </p>
@@ -101,7 +101,7 @@ function MainPage() {
             {data?.main.slice(1).map((item: any) => (
               <div
                 key={item.id}
-                className='w-[410px] h-[337px] px-[24px] pt-[16px] border'
+                className='w-[410px] h-[337px] px-[24px] py-[16px] border'
               >
                 <div className='w-full'>
                   <div
@@ -120,7 +120,7 @@ function MainPage() {
                     onClick={() => {
                       router.push(`${item.id}`);
                     }}
-                    className=' mt-3 line-clamp-2 text-[20px]  cursor-pointer	'
+                    className=' mt-3 line-clamp-2 text-[20px]  cursor-pointer font-bold	'
                   >
                     {item.title}
                   </p>
@@ -192,7 +192,7 @@ function MainPage() {
               onClick={() => {
                 router.push(`/categories/youtube`);
               }}
-              className='text-[25px] cursor-pointer'
+              className='text-[25px] cursor-pointer font-bold'
             >
               Youtube
             </div>
@@ -214,7 +214,7 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2	cursor-pointer font-bold'>
+                      <p className='text-[18px] mt-3 line-clamp-2	cursor-pointer font-bold '>
                         {item.title}
                       </p>
                       <p className='mt-1 line-clamp-2 cursor-pointer'>
@@ -231,7 +231,7 @@ function MainPage() {
               onClick={() => {
                 router.push(`/categories/game`);
               }}
-              className='text-[25px] cursor-pointer'
+              className='text-[25px] cursor-pointer font-bold'
             >
               Game
             </div>
@@ -253,7 +253,7 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2	cursor-pointer'>
+                      <p className='text-[18px] mt-3 line-clamp-2	cursor-pointer font-bold'>
                         {item.title}
                       </p>
                       <p className='mt-1 line-clamp-2 cursor-pointer'>
@@ -292,7 +292,7 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2 font-bold	'>
+                      <p className='text-[18px] mt-3 line-clamp-2 font-bold	'>
                         {item.title}
                       </p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
@@ -366,7 +366,7 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2 font-bold	'>
+                      <p className='text-[18px] mt-3 line-clamp-2 font-bold	'>
                         {item.title}
                       </p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
@@ -403,7 +403,7 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2 font-bold	'>
+                      <p className='text-[18px] mt-3 line-clamp-2 font-bold	'>
                         {item.title}
                       </p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
