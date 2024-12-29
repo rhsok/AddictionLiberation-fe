@@ -139,7 +139,7 @@ function Header() {
             style={{ top: `${headerHeight}px` }}
             className='fixed w-full  flex justify-center bg-green-100 '
           >
-            <div className='flex gap-10 w-[1440px] py-5 text-[21px]  text-green-500 '>
+            <div className='flex gap-10 w-[1440px] py-8 text-[21px] font-bold  text-green-500 '>
               <div
                 onClick={() => {
                   router.push('/categories/aboutAddiction');
@@ -158,19 +158,43 @@ function Header() {
               </div>
               <div
                 onClick={() => {
-                  router.push('/categories/alcholism');
-                }}
-                className='cursor-pointer hover:text-white'
-              >
-                Alcholism
-              </div>
-              <div
-                onClick={() => {
                   router.push('/categories/game');
                 }}
                 className='cursor-pointer hover:text-white'
               >
                 Game
+              </div>
+              <div
+                onClick={() => {
+                  router.push('/categories/alcoholism');
+                }}
+                className='cursor-pointer hover:text-white'
+              >
+                Alcoholism
+              </div>
+              <div
+                onClick={() => {
+                  router.push('/categories/gambling');
+                }}
+                className='cursor-pointer hover:text-white '
+              >
+                Gambling
+              </div>
+              <div
+                onClick={() => {
+                  router.push('/categories/drug');
+                }}
+                className='cursor-pointer hover:text-white '
+              >
+                Drug
+              </div>
+              <div
+                onClick={() => {
+                  router.push('/categories/porn');
+                }}
+                className='cursor-pointer hover:text-white'
+              >
+                Pron
               </div>
             </div>
           </div>

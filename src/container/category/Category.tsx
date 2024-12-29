@@ -16,12 +16,18 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
     switch (id) {
       case 'aboutAddiction':
         return '1';
-      case 'alcholism':
+      case 'youtube':
         return '2';
       case 'game':
         return '3';
-      case 'youtube':
+      case 'alcholism':
         return '4';
+      case 'gambling':
+        return '5';
+      case 'drug':
+        return '6';
+      case 'porn':
+        return '7';
     }
   };
 
@@ -35,6 +41,12 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         return 'GAME ADDICTION';
       case 'aboutAddiction':
         return 'About Addiction';
+      case 'gambling':
+        return 'GAMBLING';
+      case 'drug':
+        return 'DRUG';
+      case 'porn':
+        return 'PORN';
     }
   };
 
