@@ -528,7 +528,7 @@ function Write() {
             </div>
           </button>
           <button
-            onClick={() => formatDoc('fontSize', '5')}
+            onClick={() => formatDoc('fontSize', '4')}
             className='w-[48px] h-[48px] hover:bg-gray-100'
           >
             <div className='text-[16px]'>
@@ -536,7 +536,7 @@ function Write() {
             </div>
           </button>
           <button
-            onClick={() => formatDoc('fontSize', '6')}
+            onClick={() => formatDoc('fontSize', '5')}
             className='w-[48px] h-[48px] hover:bg-gray-100'
           >
             <div className='text-[16px]'>
@@ -544,11 +544,19 @@ function Write() {
             </div>
           </button>
           <button
-            onClick={() => formatDoc('fontSize', '7')}
+            onClick={() => formatDoc('fontSize', '6')}
             className='w-[48px] h-[48px] hover:bg-gray-100'
           >
             <div className='text-[16px]'>
               H<span className='text-[12px]'>4</span>
+            </div>
+          </button>
+          <button
+            onClick={() => formatDoc('fontSize', '7')}
+            className='w-[48px] h-[48px] hover:bg-gray-100'
+          >
+            <div className='text-[16px]'>
+              H<span className='text-[12px]'>5</span>
             </div>
           </button>
           <div className=' w-[1px] h-[20px] border mx-2 ' />
