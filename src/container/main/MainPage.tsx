@@ -63,7 +63,7 @@ function MainPage() {
             onClick={() => {
               router.push(`/categories/aboutAddiction`);
             }}
-            className='text-[35px] cursor-pointer'
+            className='text-[35px] cursor-pointer font-bold'
           >
             About Addiction
           </div>
@@ -107,7 +107,7 @@ function MainPage() {
                   <div
                     className='h-[202px] '
                     onClick={() => {
-                      router.push(`item.id}`);
+                      router.push(`${item.id}`);
                     }}
                   >
                     <img
@@ -118,7 +118,7 @@ function MainPage() {
                   </div>
                   <p
                     onClick={() => {
-                      router.push(`item.id}`);
+                      router.push(`${item.id}`);
                     }}
                     className=' mt-3 line-clamp-2 text-[20px]  cursor-pointer	'
                   >
@@ -126,7 +126,7 @@ function MainPage() {
                   </p>
                   <p
                     onClick={() => {
-                      router.push(`item.id}`);
+                      router.push(`${item.id}`);
                     }}
                     className='mt-1 line-clamp-2 cursor-pointer'
                   >
@@ -204,7 +204,7 @@ function MainPage() {
                       router.push(`/post/${item.id}`);
                     }}
                     key={item.id}
-                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                    className='w-1/3 h-[337px] px-[24px] py-[16px] border'
                   >
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200'>
@@ -214,7 +214,7 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2	cursor-pointer'>
+                      <p className=' mt-3 line-clamp-2	cursor-pointer font-bold'>
                         {item.title}
                       </p>
                       <p className='mt-1 line-clamp-2 cursor-pointer'>
@@ -270,7 +270,7 @@ function MainPage() {
               onClick={() => {
                 router.push(`/categories/alcoholism`);
               }}
-              className='text-[25px] cursor-pointer'
+              className='text-[25px] cursor-pointer font-bold'
             >
               Alcoholism
             </div>
@@ -282,7 +282,7 @@ function MainPage() {
                       router.push(`/post/${item.id}`);
                     }}
                     key={item.id}
-                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                    className='w-1/3 h-[337px] px-[24px] py-[16px] border'
                   >
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200'>
@@ -292,7 +292,9 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className=' mt-3 line-clamp-2 font-bold	'>
+                        {item.title}
+                      </p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
                     </div>
                   </div>
@@ -305,7 +307,7 @@ function MainPage() {
               onClick={() => {
                 router.push(`/categories/gambling`);
               }}
-              className='text-[25px] cursor-pointer'
+              className='text-[25px] cursor-pointer font-bold'
             >
               Gambling
             </div>
@@ -317,7 +319,7 @@ function MainPage() {
                       router.push(`/post/${item.id}`);
                     }}
                     key={item.id}
-                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                    className='w-1/3 h-[337px] px-[24px] py-[16px] border'
                   >
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200'>
@@ -327,7 +329,9 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className=' mt-3 line-clamp-2	font-bold'>
+                        {item.title}
+                      </p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
                     </div>
                   </div>
@@ -340,7 +344,7 @@ function MainPage() {
               onClick={() => {
                 router.push(`/categories/drug`);
               }}
-              className='text-[25px] cursor-pointer'
+              className='text-[25px] cursor-pointer font-bold'
             >
               Drug
             </div>
@@ -352,7 +356,7 @@ function MainPage() {
                       router.push(`/post/${item.id}`);
                     }}
                     key={item.id}
-                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                    className='w-1/3 h-[337px] px-[24px] py-[16px] border'
                   >
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200'>
@@ -362,7 +366,9 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className=' mt-3 line-clamp-2 font-bold	'>
+                        {item.title}
+                      </p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
                     </div>
                   </div>
@@ -375,7 +381,7 @@ function MainPage() {
               onClick={() => {
                 router.push(`/categories/porn`);
               }}
-              className='text-[25px] cursor-pointer'
+              className='text-[25px] cursor-pointer font-bold'
             >
               Pron
             </div>
@@ -387,7 +393,7 @@ function MainPage() {
                       router.push(`/post/${item.id}`);
                     }}
                     key={item.id}
-                    className='w-1/3 h-[337px] px-[24px] pt-[16px] border'
+                    className='w-1/3 h-[337px] px-[24px] py-[16px] border'
                   >
                     <div className='w-[360px] '>
                       <div className='h-[202px] bg-gray-200'>
@@ -397,7 +403,9 @@ function MainPage() {
                           className='w-full h-full cursor-pointer'
                         />
                       </div>
-                      <p className=' mt-3 line-clamp-2	'>{item.title}</p>
+                      <p className=' mt-3 line-clamp-2 font-bold	'>
+                        {item.title}
+                      </p>
                       <p className='mt-1 line-clamp-2'>{item.subtitle}</p>
                     </div>
                   </div>
