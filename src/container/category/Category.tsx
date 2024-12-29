@@ -20,7 +20,7 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
         return '2';
       case 'game':
         return '3';
-      case 'alcholism':
+      case 'alcoholism':
         return '4';
       case 'gambling':
         return '5';
@@ -35,8 +35,8 @@ const Category: React.FC<CategoryProps> = ({ params }) => {
     switch (id) {
       case 'youtube':
         return 'YOUTUBE ADDICTION';
-      case 'alcholism':
-        return 'ALCHOLSIM';
+      case 'alcoholism':
+        return 'ALCOHOLISM';
       case 'game':
         return 'GAME ADDICTION';
       case 'aboutAddiction':
