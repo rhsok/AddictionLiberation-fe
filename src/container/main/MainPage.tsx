@@ -101,7 +101,7 @@ function MainPage() {
             {data?.main.slice(1).map((item: any) => (
               <div
                 key={item.id}
-                className='w-[410px] h-[337px] px-[24px] py-[16px] border'
+                className='w-[410px] h-[337px] px-[24px] py-[16px]'
               >
                 <div className='w-full'>
                   <div
