@@ -107,7 +107,7 @@ function MainPage() {
                   <div
                     className='h-[202px] '
                     onClick={() => {
-                      router.push(`${item.id}`);
+                      router.push(`/post/${item.id}`);
                     }}
                   >
                     <img
