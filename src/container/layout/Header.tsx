@@ -69,7 +69,7 @@ function Header() {
           onClick={() => {
             router.push('/auth/login');
           }}
-          className='absolute top-3 right-10 text-white cursor-pointer'
+          className='absolute top-3 right-10 text-white cursor-pointer font-bold'
         >
           login
         </div>
@@ -81,11 +81,11 @@ function Header() {
             onClick={() => {
               router.push('/main');
             }}
-            className={` text-[70px] text-white mt-[22px]  cursor-pointer `}
+            className={` text-[70px] text-white mt-[22px]  cursor-pointer  font-extrabold  `}
           >
-            Addiction liberation journal
+            Addiction Liberation Journal
           </div>
-          <p className='mt-[33px]'>
+          <p className='mt-[33px] font-semibold   '>
             The first step in overcoming an addiction is to recognize that it
             exists
           </p>
@@ -98,7 +98,7 @@ function Header() {
             }}
             className={` text-[30px] text-white  cursor-pointer z-10 `}
           >
-            Addiction liberation journal
+            Addiction Liberation Journey
           </div>
         </>
       )}
