@@ -10,6 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {},
+      fontFamily: {
+        inter: ['var(--font-inter)', 'sans-serif'],
+        partialsans: ['var(--font-partialSans)', 'sans-serif'],
+        paperlogy: ['var(--font-paperlogy)', 'sans-serif'],
+      },
     },
   },
   plugins: [],

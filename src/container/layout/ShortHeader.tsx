@@ -17,7 +17,7 @@ function ShortHeader() {
         }}
         className={` text-[30px] text-white mt-[0px] cursor-pointer z-10 `}
       >
-        Addiction liberation journal
+        Addiction Liberation Journey
       </div>
       <div className='w-[1440px] absolute bottom-1 flex gap-5 text-white text-[25px]'>
         <div className=''>
