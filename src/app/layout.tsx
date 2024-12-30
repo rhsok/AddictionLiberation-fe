@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/container/layout/Header';
 import Footer from '@/container/layout/Footer';
 import Head from 'next/head';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,13 +22,11 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         {/* <Header /> */}
-        <Head>
-          <script
-            async
-            src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7991043744509425'
-            crossOrigin='anonymous'
-          ></script>
-        </Head>
+        <Script
+          async
+          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7991043744509425'
+          crossOrigin='anonymous'
+        ></Script>
         <main className=''>{children}</main>
         <div id='modal-root'></div>
         {/* <Footer /> */}
