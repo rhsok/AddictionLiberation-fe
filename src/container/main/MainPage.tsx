@@ -3,6 +3,7 @@ import { getMainPost } from '@/services/post/post.api';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import userStore from '@/states/userStore/userStore';
+import KakaoAdFit from '@/components/Adfit/KakaoAdFit';
 
 function MainPage() {
   const [data, setData] = useState<any>({
@@ -137,6 +138,14 @@ function MainPage() {
             ))}
           </div>
         </div>
+        <div className=''>
+          <KakaoAdFit
+            unit={`DAN-u10FyClAUTlni6NN`}
+            width={160}
+            height={600}
+            disabled={false}
+          />
+        </div>
         {/* <div className='flex w-[360px]  p-1'>
           <div className='w-full  border border-black'>
             <div className='flex justify-center mt-[38px] text-[27px]'>
@@ -224,6 +233,14 @@ function MainPage() {
                   </div>
                 ))}
             </div>
+          </div>
+          <div>
+            <KakaoAdFit
+              unit={`DAN-M4SAQOpiqCJOUYxF`}
+              width={728}
+              height={90}
+              disabled={false}
+            />
           </div>
           <div className='w-full h-1 border-black border-2'></div>
           <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
@@ -375,6 +392,15 @@ function MainPage() {
                 ))}
             </div>
           </div>
+          <div>
+            {'에드핏'}
+            <KakaoAdFit
+              unit={`DAN-M4SAQOpiqCJOUYxF`}
+              width={728}
+              height={90}
+              disabled={false}
+            />
+          </div>
           <div className='w-full h-1 border-black border-2'></div>
           <div className='w-full px-[67px] pb-[64px] pt-[14px]'>
             <div
@@ -383,7 +409,7 @@ function MainPage() {
               }}
               className='text-[25px] cursor-pointer font-bold'
             >
-              Pron
+              Porn
             </div>
             <div className='flex gap-[49px] w-full mt-[14px] '>
               {data &&
