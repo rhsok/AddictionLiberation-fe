@@ -138,7 +138,7 @@ function MainPage() {
             ))}
           </div>
         </div>
-        <div className=''>
+        <div className='flex flex-row justify-center w-[360px] '>
           <KakaoAdFit
             unit={`DAN-u10FyClAUTlni6NN`}
             width={160}
@@ -234,7 +234,7 @@ function MainPage() {
                 ))}
             </div>
           </div>
-          <div>
+          <div className='flex flex-row justify-center w-full '>
             <KakaoAdFit
               unit={`DAN-M4SAQOpiqCJOUYxF`}
               width={728}
@@ -392,10 +392,9 @@ function MainPage() {
                 ))}
             </div>
           </div>
-          <div>
-            {'에드핏'}
+          <div className='flex flex-row justify-center w-full '>
             <KakaoAdFit
-              unit={`DAN-M4SAQOpiqCJOUYxF`}
+              unit={`DAN-e35e9jQkBrGdhXth`}
               width={728}
               height={90}
               disabled={false}
